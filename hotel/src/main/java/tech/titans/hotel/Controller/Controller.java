@@ -1,4 +1,4 @@
-package tech.titans.controller;
+package tech.titans.hotel.Controller;
 
 @RestController
 
