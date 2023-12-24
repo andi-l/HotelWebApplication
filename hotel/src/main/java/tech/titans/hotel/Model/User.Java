@@ -1,4 +1,4 @@
-package tech.titans.hotel.User;
+package tech.titans.hotel.Model;
 
 public class User {
 

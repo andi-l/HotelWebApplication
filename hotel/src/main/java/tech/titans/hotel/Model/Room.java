@@ -1,4 +1,4 @@
-package tech.titans.hotel.Modul;
+package tech.titans.hotel.Model;
 
 public class Room {
 
