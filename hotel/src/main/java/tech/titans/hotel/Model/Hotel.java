@@ -9,15 +9,15 @@ public class Hotel {
     ArrayList<Room> availablerooms; 
     ArrayList<Room> bookedrooms;
     double rating;
-    int[] allratings; //type muss geändert werden zu rating
-    
+    ArrayList<Rating> allratings;
 
-    public Hotel(String name, String location, double rating, ArrayList<Room> availablerooms, ArrayList<Room> bookedrooms) {
+    public Hotel(String name, String location, double rating, ArrayList<Room> availablerooms, ArrayList<Room> bookedrooms, ArrayList<Rating> allRatings) {
         this.name = name;
         this.location = location;
         this.rating = rating;
-        this.availablerooms = availablerooms = new ArrayList<Room>();
-        this.bookedrooms = bookedrooms = new ArrayList<Room>(); 
+        this.availablerooms  = new ArrayList<Room>();
+        this.bookedrooms = new ArrayList<Room>(); 
+        this.allratings = new ArrayList<Rating>();
     }
 
 
@@ -46,14 +46,6 @@ public class Hotel {
     }
 
 
-    public int[] getAllratings() {
-        return this.allratings;
-    }
-
-    public void setAllratings(int[] allratings) {
-        this.allratings = allratings;
-    }
-
 
     public ArrayList<Room> getAvailablerooms() {
         return this.availablerooms;
@@ -71,6 +63,14 @@ public class Hotel {
         this.bookedrooms = bookedrooms;
     }
 
+
+    public ArrayList<Rating> getAllratings() {
+        return this.allratings;
+    }
+
+    public void setAllratings(ArrayList<Rating> allratings) {
+        this.allratings = allratings;
+    }
 
 
 
