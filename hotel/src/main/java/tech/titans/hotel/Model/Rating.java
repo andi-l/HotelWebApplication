@@ -9,6 +9,10 @@ public class Rating{
         this.comment = comment;
     }
 
+    public Rating(int stars) {
+        this.stars = stars;
+    }
+
 }
     public int getStars() {
         return this.stars;
