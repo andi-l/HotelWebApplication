@@ -1,22 +1,22 @@
 package tech.titans.hotel.Model;
 
 public class Booking{
-    Room type;
+    String type;
     Date bookingDate;
     String hotelName;
 
 
-    public Booking(Room type, Date bookingDate, String hotelName) {
+    public Booking(String type, Date bookingDate, String hotelName) {
         this.type = type;
         this.bookingDate = bookingDate;
         this.hotelName = hotelName;
     }
 
-    public Room getType() {
+    public String getType() {
         return this.type;
     }
 
-    public void setType(Room type) {
+    public void setType(String type) {
         this.type = type;
     }
 
