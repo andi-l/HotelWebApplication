@@ -1,22 +1,23 @@
 package tech.titans.hotel.Model;
+import java.util.ArrayList;
 
 
 public class Hotel {
     
     String name;
     String location;
-    Room availablerooms; 
-    Room bookedrooms;
+    ArrayList<Room> availablerooms; 
+    ArrayList<Room> bookedrooms;
     double rating;
     int[] allratings; //type muss geändert werden zu rating
     
 
-    public Hotel(String name, String location, double rating, Room availablerooms, Room bookedrooms) {
+    public Hotel(String name, String location, double rating, ArrayList<Room> availablerooms, ArrayList<Room> bookedrooms) {
         this.name = name;
         this.location = location;
         this.rating = rating;
-        this.availablerooms = availablerooms;
-        this.bookedrooms = bookedrooms;
+        this.availablerooms = availablerooms = new ArrayList<Room>();
+        this.bookedrooms = bookedrooms = new ArrayList<Room>(); 
     }
 
 
@@ -45,22 +46,6 @@ public class Hotel {
     }
 
 
-    public Room getAvailablerooms() {
-        return this.availablerooms;
-    }
-
-    public void setAvailablerooms(Room availablerooms) {
-        this.availablerooms = availablerooms;
-    }
-
-    public Room getBookedrooms() {
-        return this.bookedrooms;
-    }
-
-    public void setBookedrooms(Room bookedrooms) {
-        this.bookedrooms = bookedrooms;
-    }
-
     public int[] getAllratings() {
         return this.allratings;
     }
@@ -68,6 +53,25 @@ public class Hotel {
     public void setAllratings(int[] allratings) {
         this.allratings = allratings;
     }
+
+
+    public ArrayList<Room> getAvailablerooms() {
+        return this.availablerooms;
+    }
+
+    public void setAvailablerooms(ArrayList<Room> availablerooms) {
+        this.availablerooms = availablerooms;
+    }
+
+    public ArrayList<Room> getBookedrooms() {
+        return this.bookedrooms;
+    }
+
+    public void setBookedrooms(ArrayList<Room> bookedrooms) {
+        this.bookedrooms = bookedrooms;
+    }
+
+
 
 
     @Override
