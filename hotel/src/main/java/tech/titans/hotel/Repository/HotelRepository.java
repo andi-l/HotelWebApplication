@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class RoomRepository {
+public class HotelRepository {
 
-  public ArrayList<Room> roomList = new ArrayList<>();
+  public ArrayList<Room> hotelList = new ArrayList<>();
 }
