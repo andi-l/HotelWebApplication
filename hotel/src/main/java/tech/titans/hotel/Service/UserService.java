@@ -1,0 +1,79 @@
+package fra.uas.hotel.Service;
+
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import fra.uas.User.Repository.UserRepository;
+import fra.uas.User.model.User;
+
+
+@Service
+public class UserService {
+
+    @Autowired
+    public UserRepository userRepository;
+
+    // Create a User
+    @Override
+    public void createUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be empty");
+        }
+        if (usernameExists(user.getUsername())) {
+            throw new IllegalStateException("Username already exists");
+        }
+        userRepository.userList.add(user);
+        System.out.println("New User " + user.getFirstName() + " created!");
+    }
+
+    // Delete a User
+    @Override
+    public void deleteUser(String username) {
+        userRepository.userList.removeIf(user -> user.getUsername().equals(username));
+    }
+
+    // Check if Username already exists
+    @Override
+    public boolean usernameExists(String name) {
+        return userRepository.userList.stream()
+                                 .anyMatch(user -> user.getUsername().equalsIgnoreCase(name));
+    }
+
+    // Return the userRepository
+    @Override
+    public ArrayList<User> getUserList() {
+
+        return userRepository.userList;
+    }
+
+    // Change Password
+   @Override
+    public boolean changePassword(String username, String newPassword) {
+        for (User user : userRepository.userList) {
+            if (user.getUsername().equals(username)) {
+                user.setPassword(newPassword);
+                System.out.println("Password for user " + username + " has been updated.");
+            return true;
+        }
+    }
+    System.out.println("User not found.");
+    return false;
+
+    // Change Username
+    @Override
+    public boolean changeUsername(String oldUsername, String newUsername) {
+        for (User user : userRepository.userList) {
+            if (user.getUsername().equals(oldUsername)) {
+                if (!usernameExists(newUsername)) {
+                    user.setUsername(newUsername);
+                    return true;
+                } else {
+                    System.out.println("Username already exists.");
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+}
+}

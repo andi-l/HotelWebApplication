@@ -1,53 +1,89 @@
 package tech.titans.hotel.Model;
 
+import java.util.Objects;
+
 public class User {
 
-    private String name;
-    private String email;
-    private String password;
+  private String username;
+  private String firstName;
+  private String lastName;
+  private String email;
+  private String password;
 
-    // Konstruktor
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
+  // Full Constructor
+  public User(
+    String username,
+    String firstName,
+    String lastName,
+    String email,
+    String password
+  ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.password = password;
+  }
 
-    // Getter und Setter für name
-    public String getName() {
-        return name;
-    }
+  public String getUsername() {
+    return this.username;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    // Getter und Setter für email
-    public String getEmail() {
-        return email;
-    }
+  public String getFirstName() {
+    return this.firstName;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    // Getter und Setter für password
-    public String getPassword() {
-        return password;
-    }
+  public String getLastName() {
+    return this.lastName;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    // toString Methode
-    @Override
-    public String toString() {
-        return "User{" +
-               "name='" + name + '\'' +
-               ", email='" + email + '\'' +
-               ", password='" + password + '\'' +
-               '}';
-    }
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  @Override
+  public String toString() {
+    return (
+      "User{" +
+      " username='" +
+      getUsername() +
+      "'" +
+      ", firstName='" +
+      getFirstName() +
+      "'" +
+      ", lastName='" +
+      getLastName() +
+      "'" +
+      ", email='" +
+      getEmail() +
+      "'" +
+      ", password='" +
+      getPassword() +
+      "'" +
+      "}"
+    );
+  }
 }
-
