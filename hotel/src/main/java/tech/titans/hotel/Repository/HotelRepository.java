@@ -1,4 +1,4 @@
-package fra.uas.Repository;
+package tech.titans.hotel.Repository;
 
 import fra.uas.Room.Model.Room;
 import java.util.ArrayList;
@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class HotelRepository {
 
-  public ArrayList<Hotel> hotelList = new ArrayList<>();
+  public List<Hotel> hotelList = new List<>();
 }
