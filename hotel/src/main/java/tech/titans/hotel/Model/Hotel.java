@@ -1,22 +1,23 @@
 package tech.titans.hotel.Model;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Hotel {
     
-    String name;
-    String location;
-    ArrayList<Room> availablerooms; 
-    ArrayList<Room> bookedrooms;
-    double rating;
-    ArrayList<Rating> allratings;
+    private String name;
+    private String location;
+    private ArrayList<Booking> bookings;
+    private ArrayList<Room> rooms;
+    private double rating;
+    private ArrayList<Rating> allratings;
 
-    public Hotel(String name, String location, double rating, ArrayList<Room> availablerooms, ArrayList<Room> bookedrooms, ArrayList<Rating> allRatings) {
+    public Hotel(String name, String location, double rating, ArrayList<Booking> booking, ArrayList<Rating> allRatings) {
         this.name = name;
         this.location = location;
         this.rating = rating;
-        this.availablerooms  = new ArrayList<Room>();
-        this.bookedrooms = new ArrayList<Room>(); 
+        this.bookings = new ArrayList<Booking>();
+        this. rooms = new ArrayList<Room>();
         this.allratings = new ArrayList<Rating>();
     }
 
@@ -45,25 +46,6 @@ public class Hotel {
         this.rating = rating;
     }
 
-
-
-    public ArrayList<Room> getAvailablerooms() {
-        return this.availablerooms;
-    }
-
-    public void setAvailablerooms(ArrayList<Room> availablerooms) {
-        this.availablerooms = availablerooms;
-    }
-
-    public ArrayList<Room> getBookedrooms() {
-        return this.bookedrooms;
-    }
-
-    public void setBookedrooms(ArrayList<Room> bookedrooms) {
-        this.bookedrooms = bookedrooms;
-    }
-
-
     public ArrayList<Rating> getAllratings() {
         return this.allratings;
     }
@@ -72,13 +54,27 @@ public class Hotel {
         this.allratings = allratings;
     }
 
-
-
-    @Override
-    public String toString() {
-        return "{name= " + getName()+ ", location= " + getLocation() +  ", availablerooms= " + getAvailablerooms() + ", bookedrooms= " + getBookedrooms() +
-            ", rating= " + getRating() + ", allratings= " + getAllratings();
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
+    public void addRoom(Room room) {
+        if (rooms == null) {
+            rooms = new ArrayList<>();
+        }
+        rooms.add(room);
+    }
 
+    public void removeRoom(Room room) {
+        if (rooms != null) {
+            rooms.remove(room);
+        }
+    }
+
+    public List<Room> getRooms() {
+        if (rooms == null) {
+            rooms = new ArrayList<>();
+        }
+        return rooms;
+    }
 }

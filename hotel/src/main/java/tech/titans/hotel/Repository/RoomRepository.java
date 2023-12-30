@@ -1,6 +1,6 @@
-package fra.uas.Repository;
+package tech.titans.hotel.Repository;
 
-import fra.uas.Room.Model.Room;
+import tech.titans.hotel.Model.*;
 import java.util.ArrayList;
 import org.springframework.stereotype.Repository;
 

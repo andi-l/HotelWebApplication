@@ -1,11 +1,16 @@
 package tech.titans.hotel.Repository;
 
-import fra.uas.Room.Model.Room;
+import tech.titans.hotel.Model.*;
 import java.util.ArrayList;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class HotelRepository {
 
-  public List<Hotel> hotelList = new List<>();
+  public ArrayList<Hotel> hotelList = new ArrayList<>();
+
+  
+  public void addHotel(Hotel hotel) {
+    hotelList.add(hotel);
+}
 }

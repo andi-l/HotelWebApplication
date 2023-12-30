@@ -6,14 +6,12 @@ public class User {
     private String email;
     private String password;
 
-    // Konstruktor
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    // Getter und Setter für name
     public String getName() {
         return name;
     }
@@ -22,7 +20,6 @@ public class User {
         this.name = name;
     }
 
-    // Getter und Setter für email
     public String getEmail() {
         return email;
     }
@@ -31,7 +28,6 @@ public class User {
         this.email = email;
     }
 
-    // Getter und Setter für password
     public String getPassword() {
         return password;
     }
@@ -40,7 +36,6 @@ public class User {
         this.password = password;
     }
 
-    // toString Methode
     @Override
     public String toString() {
         return "User{" +

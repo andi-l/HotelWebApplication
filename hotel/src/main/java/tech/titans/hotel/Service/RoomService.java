@@ -1,6 +1,6 @@
-package fra.uas.Room.Service;
+package tech.titans.hotel.Service;
 
-import fra.uas.Room.Model.Room;
+import tech.titans.hotel.Model.*;
 import java.util.ArrayList;
 
 public interface RoomService {
