@@ -1,8 +1,9 @@
-package fra.uas.hotel.Repository;
+package tech.titans.hotel.Repository;
 
-import fra.uas.hotel.model.User;
+
 import java.util.ArrayList;
 import org.springframework.stereotype.Repository;
+import tech.titans.hotel.Model.User;
 
 @Repository
 public class UserRepository {

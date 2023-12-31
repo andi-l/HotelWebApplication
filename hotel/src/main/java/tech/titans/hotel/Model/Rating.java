@@ -13,7 +13,7 @@ public class Rating{
         this.stars = stars;
     }
 
-}
+
     public int getStars() {
         return this.stars;
     }
@@ -29,3 +29,4 @@ public class Rating{
     public void setComment(String comment) {
         this.comment = comment;
     }
+}

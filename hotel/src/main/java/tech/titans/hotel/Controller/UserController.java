@@ -1,11 +1,15 @@
 package tech.titans.hotel.Controller;
 
-import fra.uas.Service.UserService;
-import fra.uas.hotel.Model.User;
-import java.util.ArrayList;
+
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.titans.hotel.Model.User;
+import tech.titans.hotel.Service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -17,11 +21,18 @@ public class UserController {
   // Create a new User
   @PostMapping("/create")
   public ResponseEntity<?> createUser(@RequestBody User user) {
+    if(userService.usernameExists(user.getUsername())){
+      return ResponseEntity.badRequest().body("Username already exists");
+    }
+    System.out.println(user);
     userService.createUser(user);
     return ResponseEntity.ok(
       "User " + user.getUsername() + " created successfully"
     );
   }
+
+
+  // add method to see all users: + "allUsers: "+ userService.userRepository.userList
 
   // Delete a User
   @DeleteMapping("/delete/{username}")
@@ -62,7 +73,7 @@ public class UserController {
 
   // Get list of all Users
   @GetMapping("/list")
-  public List<User> getUserList() {
+  public ArrayList<User> getUserList() {
     return userService.getUserList();
   }
 }

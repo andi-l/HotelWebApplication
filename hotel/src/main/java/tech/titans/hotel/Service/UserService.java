@@ -1,27 +1,22 @@
-package fra.uas.hotel.Service;
+package tech.titans.hotel.Service;
 
-import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import fra.uas.User.Repository.UserRepository;
-import fra.uas.User.model.User;
+import tech.titans.hotel.Model.User;
+import tech.titans.hotel.Repository.UserRepository;
 
+import java.util.ArrayList;
 
 @Service
-public class UserService {
+public class UserService implements UserServiceInterface{
 
     @Autowired
-    public UserRepository userRepository;
+    public UserRepository userRepository ;
 
     // Create a User
     @Override
     public void createUser(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be empty");
-        }
-        if (usernameExists(user.getUsername())) {
-            throw new IllegalStateException("Username already exists");
-        }
         userRepository.userList.add(user);
         System.out.println("New User " + user.getFirstName() + " created!");
     }
@@ -33,7 +28,7 @@ public class UserService {
     }
 
     // Check if Username already exists
-    @Override
+
     public boolean usernameExists(String name) {
         return userRepository.userList.stream()
                                  .anyMatch(user -> user.getUsername().equalsIgnoreCase(name));
@@ -47,7 +42,7 @@ public class UserService {
     }
 
     // Change Password
-   @Override
+    @Override
     public boolean changePassword(String username, String newPassword) {
         for (User user : userRepository.userList) {
             if (user.getUsername().equals(username)) {
@@ -59,7 +54,10 @@ public class UserService {
     System.out.println("User not found.");
     return false;
 
-    // Change Username
+
+}
+
+//Change Username
     @Override
     public boolean changeUsername(String oldUsername, String newUsername) {
         for (User user : userRepository.userList) {
@@ -75,5 +73,4 @@ public class UserService {
         }
         return false;
     }
-}
 }
