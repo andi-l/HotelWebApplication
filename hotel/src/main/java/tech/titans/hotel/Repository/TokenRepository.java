@@ -1,42 +1,67 @@
 package tech.titans.hotel.Repository;
 
+import tech.titans.hotel.Model.Token;
+
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TokenRepository {
-    private HashMap<String, TokenInfo> tokens = new HashMap<>();
+    public List<Token> tokens = new ArrayList<>();
 
-    public void createOrUpdateToken(String username, String token) {
-        tokens.put(username, new TokenInfo(token, LocalDateTime.now().plusHours(1)));
-    }
-
-    public void deleteToken(String username) {
-        tokens.remove(username);
-    }
-
-    public boolean isTokenValid(String username, String token) {
-        TokenInfo tokenInfo = tokens.get(username);
-        if (tokenInfo != null && tokenInfo.getToken().equals(token)) {
-            return tokenInfo.getExpiry().isAfter(LocalDateTime.now());
+    public Boolean tokenExists(String username) {
+        for (Token tokenInList : tokens) {
+            if (tokenInList.getUsername().equals(username)) {
+                return true;
+            }
         }
         return false;
     }
 
-    private static class TokenInfo {
-        private String token;
-        private LocalDateTime expiry;
-
-        public TokenInfo(String token, LocalDateTime expiry) {
-            this.token = token;
-            this.expiry = expiry;
+    public void updateToken(String token) {
+        for (Token tokenInList : tokens) {
+            if (tokenInList.getTokenValue().equals(token)) {
+                tokenInList.setExpiryTime(LocalDateTime.now().plusHours(1));
+            }
         }
 
-        public String getToken() {
-            return token;
-        }
-
-        public LocalDateTime getExpiry() {
-            return expiry;
-        }
     }
+
+    public void deleteToken(String username) {
+        tokens.removeIf(tokenInList -> tokenInList.getUsername().equals(username));
+    }
+
+    public boolean isTokenValid(String token) {
+        Token tokenInfo = getTokenByAuthtoken(token);
+        if (tokenInfo != null && tokenInfo.getTokenValue().equals(token)) {
+            return tokenInfo.getExpiryTime().isAfter(LocalDateTime.now());
+        }
+        return false;
+    }
+
+    public Token getTokenByAuthtoken(String token) {
+
+        for (Token tokenInList : tokens) {
+            if (tokenInList.getTokenValue().equals(token)) {
+                return tokenInList;
+            }
+        }
+        return null;
+    }
+
+    public Token getTokenByUsername(String username) {
+
+        for (Token tokenInList : tokens) {
+            if (tokenInList.getUsername().equals(username)) {
+                return tokenInList;
+            }
+        }
+        return null;
+    }
+
+    public String getUsernameByToken(String token) {
+        return getTokenByAuthtoken(token).getUsername();
+    }
+
+
 }

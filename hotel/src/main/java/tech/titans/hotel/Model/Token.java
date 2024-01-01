@@ -7,10 +7,10 @@ public class Token {
     private String tokenValue;
     private LocalDateTime expiryTime;
 
-    public Token(String username, String tokenValue, LocalDateTime expiryTime) {
+    public Token(String username, String tokenValue) {
         this.username = username;
         this.tokenValue = tokenValue;
-        this.expiryTime = expiryTime;
+        this.expiryTime = LocalDateTime.now().plusHours(1);
     }
 
     // Getters

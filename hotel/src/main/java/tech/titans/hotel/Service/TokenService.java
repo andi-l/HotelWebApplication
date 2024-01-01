@@ -1,13 +1,52 @@
 package tech.titans.hotel.Service;
 
-public interface TokenService {
+import org.springframework.stereotype.Service;
+import tech.titans.hotel.Model.Token;
+import tech.titans.hotel.Repository.TokenRepository;
 
-    //Creates a Token for the User that is valid for 1 Hour
-    public void createToke(String username);
+import java.util.UUID;
 
-    // The Token is being updated when the user interacts with the Service so that the login time span is longer
-    public void updateToken(String token);
+@Service
+public class TokenService implements TokenServiceInterface {
+    private TokenRepository tokenRepository = new TokenRepository();
 
-    //Deletes the Token when user Logs out or if the last user interaction is older than 1 hour
-    public void deleteToken(String username);
+    @Override
+    public String createToken(String username) {
+        if (tokenRepository.tokenExists(username)) {
+            tokenRepository.deleteToken(username);
+        }
+        String token = UUID.randomUUID().toString();
+        tokenRepository.tokens.add(new Token(username, token));
+        return token;
+    }
+
+    @Override
+    public void updateToken(String token) {
+        tokenRepository.updateToken(token);
+
+    }
+
+    @Override
+    public void deleteToken(String username) {
+        tokenRepository.deleteToken(username);
+    }
+
+    @Override
+    public boolean isTokenValid(String token) {
+        return tokenRepository.isTokenValid(token);
+    }
+
+    @Override
+    public String getUsernameByToken(String token) {
+        return tokenRepository.getUsernameByToken(token);
+    }
+
+    @Override
+    public void changeUsernameOfToken(String token, String newUsername) {
+
+        tokenRepository.getTokenByAuthtoken(token).setUsername(newUsername);
+
+    }
+
+
 }
