@@ -63,8 +63,6 @@ public class BookingService {
         return true; // Rooms available
 }
 
-
-
     public List<Hotel> getAllHotels() {
         return hotelRepository.hotelList;
       }
@@ -73,4 +71,34 @@ public class BookingService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.parse(dateString);
     }
-}
+    
+    public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, String hotelName, int capacity) {
+        try {
+            Date checkInDate = parseDate(checkInDateString);
+            Date checkOutDate = parseDate(checkOutDateString);
+    
+            List<Room> availableRooms = checkAvailability(checkInDateString, checkOutDateString, capacity);
+    
+            for (Room room : availableRooms) {
+                if (room.getType().equals(roomType) && room.getHotel().getName().equals(hotelName)) {
+                    Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, hotelName, capacity);
+    
+                    // Add the booking to the hotel
+                    room.getHotel().addBooking(newBooking);
+    
+                    return newBooking;
+                }
+            }
+    
+            // Wenn kein Zimmer verfügbar ist
+            System.out.println("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien im Hotel: " + hotelName);
+        } catch (ParseException e) {
+            System.out.println("Fehler bei der Datumsumwandlung: " + e.getMessage());
+        }
+        return null;
+    }
+
+    }
+    
+
+
