@@ -13,6 +13,7 @@ public interface UserServiceInterface {
     public boolean usernameExists(String name);
 
     public ArrayList<User> getUserList();
+    
     public boolean changePassword(String username, String newPassword);
 
     public boolean changeUsername(String oldUsername, String newUsername);
