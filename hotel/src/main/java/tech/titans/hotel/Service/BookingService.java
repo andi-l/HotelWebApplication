@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +31,6 @@ public class BookingService {
             // check availability and return available rooms
             for (Hotel hotel : getAllHotels()) {
                 for (Room room : hotel.getRooms()) {
-                    // Check if the room matches & free on specific date 
                     if (room.getCapacity() == capacity && isRoomAvailable(capacity, checkInDate, checkOutDate)) {
                         availableRooms.add(room);
                     }
@@ -42,12 +40,11 @@ public class BookingService {
             return availableRooms;
         } catch (ParseException e) {
             // Handle the exception if the date strings could not be parsed
+            System.out.println("Fehler bei der Datumsumwandlung: " + e.getMessage());
             return new ArrayList<>();
         }
-        }
-    
+    }
 
-    // checks if a room with a given capacity is available within the specified dates across all hotels
     private boolean isRoomAvailable(int capacity, Date checkInDate, Date checkOutDate) {
         for (Hotel hotel : getAllHotels()) {
             for (Booking booking : hotel.getBookings()) {
@@ -64,17 +61,17 @@ public class BookingService {
             }
         }
         return true; // Rooms available
-}
+    }
 
     public List<Hotel> getAllHotels() {
         return hotelRepository.hotelList;
-      }
+    }
 
-      public List<Booking> getAllBookings() {
+    public List<Booking> getAllBookings() {
         return bookingRepository.bookingList;
     }
 
-      private Date parseDate(String dateString) throws ParseException {
+    private Date parseDate(String dateString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.parse(dateString);
     }
@@ -91,21 +88,22 @@ public class BookingService {
                     Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, capacity);
     
                     // Add the booking to the hotel
-                    room.getHotel().addBooking(newBooking);
+                    bookingRepository.bookingList.add(newBooking);
+    
+                    // Remove the booked room from the hotel
+                    // to do hotel.removeRoom(room);
     
                     return newBooking;
                 }
             }
-    
+
             // Wenn kein Zimmer verfügbar ist
             System.out.println("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien");
+            return null;
+
         } catch (ParseException e) {
             System.out.println("Fehler bei der Datumsumwandlung: " + e.getMessage());
+            return null;
         }
-        return null;
     }
-
-    }
-    
-
-
+}
