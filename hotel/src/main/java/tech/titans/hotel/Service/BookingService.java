@@ -79,26 +79,35 @@ public class BookingService {
     
             List<Room> availableRooms = checkAvailability(checkInDateString, checkOutDateString, capacity);
     
-            for (Room room : availableRooms) {
-                if (room.getType().equals(roomType) && room.getHotel().getName().equals(hotelName)) {
-                    Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, hotelName, capacity);
+            for (Hotel hotel : getAllHotels()) {
+                if (hotel.getName().equals(hotelName)) {
+                    for (Room room : availableRooms) {
+                        if (room.getType().equals(roomType) && room.getHotel().getName().equals(hotelName)) {
+                            Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, hotelName, capacity);
     
-                    // Add the booking to the hotel
-                    room.getHotel().addBooking(newBooking);
+                            // Add the booking to the hotel
+                            hotel.addBooking(newBooking);
     
-                    return newBooking;
+                            // Remove the booked room from the hotel
+                            hotel.removeRoom(room);
+    
+                            return newBooking;
+                        }
+                    }
                 }
             }
     
-            // Wenn kein Zimmer verfügbar ist
+            // Wenn kein Zimmer verfügbar ist oder das Hotel nicht gefunden wurde
             System.out.println("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien im Hotel: " + hotelName);
         } catch (ParseException e) {
             System.out.println("Fehler bei der Datumsumwandlung: " + e.getMessage());
         }
         return null;
     }
-
+          
+    
     }
+
     
 
 
