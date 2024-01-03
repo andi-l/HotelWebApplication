@@ -19,6 +19,9 @@ public class BookingService {
     @Autowired
     private HotelRepository hotelRepository;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     public List<Room> checkAvailability(String checkInDateString, String checkOutDateString, int capacity) {
         try {
             Date checkInDate = parseDate(checkInDateString);
@@ -67,12 +70,16 @@ public class BookingService {
         return hotelRepository.hotelList;
       }
 
+      public List<Booking> getAllBookings() {
+        return bookingRepository.bookingList;
+    }
+
       private Date parseDate(String dateString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.parse(dateString);
     }
     
-    public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, String hotelName, int capacity) {
+    public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, int capacity) {
         try {
             Date checkInDate = parseDate(checkInDateString);
             Date checkOutDate = parseDate(checkOutDateString);
@@ -80,8 +87,8 @@ public class BookingService {
             List<Room> availableRooms = checkAvailability(checkInDateString, checkOutDateString, capacity);
     
             for (Room room : availableRooms) {
-                if (room.getType().equals(roomType) && room.getHotel().getName().equals(hotelName)) {
-                    Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, hotelName, capacity);
+                if (room.getType().equals(roomType)) {
+                    Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, capacity);
     
                     // Add the booking to the hotel
                     room.getHotel().addBooking(newBooking);
@@ -91,7 +98,7 @@ public class BookingService {
             }
     
             // Wenn kein Zimmer verfügbar ist
-            System.out.println("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien im Hotel: " + hotelName);
+            System.out.println("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien");
         } catch (ParseException e) {
             System.out.println("Fehler bei der Datumsumwandlung: " + e.getMessage());
         }

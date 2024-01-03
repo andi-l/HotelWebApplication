@@ -21,7 +21,7 @@ public class InitData {
         
 
         // Create Hotel 1
-        Hotel hotel1 = new Hotel("Hotel A", "Location A", 4.5, new ArrayList<>(), new ArrayList<>());
+        Hotel hotel1 = new Hotel("Hotel1", "Location A", 4.5, new ArrayList<>(), new ArrayList<>());
 
         // Create Room 1 for Hotel 1
         Room room1 = new Room("Standard", 100.0, 1);

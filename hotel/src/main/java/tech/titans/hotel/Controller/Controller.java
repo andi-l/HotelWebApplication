@@ -11,22 +11,21 @@ import tech.titans.hotel.Model.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/booking")
 public class Controller {
 
     @Autowired
     private BookingService bookingService;
 
-    @GetMapping(value = "/availability/{checkInDate}/{checkOutDate}/{capacity}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/availability", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> checkAvailability(
-            @PathVariable("checkInDate") String checkInDateString,
-            @PathVariable("checkOutDate") String checkOutDateString,
-            @PathVariable("capacity") int capacity) {
+            @RequestParam("checkInDate") String checkInDateString,
+            @RequestParam("checkOutDate") String checkOutDateString,
+            @RequestParam("capacity") int capacity) {
         
         List<Room> availableRooms = bookingService.checkAvailability(checkInDateString, checkOutDateString, capacity);
 
         if (availableRooms.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No rooms with matching criteria");
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(availableRooms);
         }
@@ -37,11 +36,11 @@ public class Controller {
             @RequestParam("roomType") String roomType,
             @RequestParam("checkInDate") String checkInDateString,
             @RequestParam("checkOutDate") String checkOutDateString,
-            @RequestParam("hotelName") String hotelName,
+            // @RequestParam("hotelName") String hotelName,
             @RequestParam("capacity") int capacity) {
         
         try {
-            Booking newBooking = bookingService.createBooking(roomType, checkInDateString, checkOutDateString, hotelName, capacity);
+            Booking newBooking = bookingService.createBooking(roomType, checkInDateString, checkOutDateString, capacity);
 
             if (newBooking == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
@@ -51,5 +50,11 @@ public class Controller {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fehler bei der Erstellung der Buchung: " + e.getMessage());
         }
+    }
+
+    @GetMapping(value = "/booking", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Booking>> getAllBookings() {
+        List<Booking> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(bookings);
     }
 }

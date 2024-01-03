@@ -8,13 +8,14 @@ public class Booking {
     private Date checkInDate;
     private Date checkOutDate;
     private String hotelName;
+    
 
-    public Booking(String roomType, Date checkInDate, Date checkOutDate, String hotelName, int roomCapacity) {
+    public Booking(String roomType, Date checkInDate, Date checkOutDate, int roomCapacity) {
         this.roomType = roomType;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
-        this.hotelName = hotelName;
         this.roomCapacity = roomCapacity;
+        this.hotelName = "HotelA";
     }
 
     public String getRoomType() {
@@ -41,13 +42,13 @@ public class Booking {
         this.checkOutDate = checkOutDate;
     }
 
-    public String getHotelName() {
-        return hotelName;
-    }
+    // public String getHotelName() {
+    //     return hotelName;
+    // }
 
-    public void setHotelName(String hotelName) {
-        this.hotelName = hotelName;
-    }
+    // public void setHotelName(String hotelName) {
+    //     this.hotelName = hotelName;
+    // }
 
     public int getRoomCapacity(){
         return roomCapacity;
