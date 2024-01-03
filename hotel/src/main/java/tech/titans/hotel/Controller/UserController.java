@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.titans.hotel.Model.Role;
 import tech.titans.hotel.Model.User;
 import tech.titans.hotel.Model.UserDTO;
 import tech.titans.hotel.Service.TokenServiceInterface;
@@ -35,8 +36,6 @@ public class UserController {
         );
     }
 
-    // add method to see all users: + "allUsers: "+ userService.userRepository.userList
-
     // User Login
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserDTO user) {
@@ -54,52 +53,65 @@ public class UserController {
         if (tokenService.isTokenValid(authToken)) {
             return ResponseEntity.ok("Access to protected resource granted");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in or the session has expired");
         }
     }
 
+
     // Delete a User
-    @DeleteMapping("/delete/{username}")
-    public ResponseEntity<?> deleteUser(@PathVariable String username) {
-        userService.deleteUser(username);
-        return ResponseEntity.ok("User " + username + " deleted successfully");
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
+        String username = tokenService.getUsernameByToken(token);
+        boolean result = userService.deleteUser(username);
+        if (result) {
+            return ResponseEntity.ok("User " + username + " deleted successfully");
+        } else {
+            return ResponseEntity.badRequest().body("User not found or could not be deleted");
+        }
     }
 
     // Change Password
-    @PutMapping("/changepassword")
-    public ResponseEntity<?> changePassword(
-            @RequestParam String username,
-            @RequestParam String newPassword
-    ) {
-        boolean result = userService.changePassword(username, newPassword);
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String token,
+                                            @RequestBody UserDTO newPasswordDTO) {
+        String username = tokenService.getUsernameByToken(token);
+        boolean result = userService.changePassword(username, newPasswordDTO.getPassword());
         if (result) {
-            return ResponseEntity.ok("Password updated successfully");
+            return ResponseEntity.ok("Password updated successfully for user " + username);
         } else {
-            return ResponseEntity.badRequest().body("User not found");
+            return ResponseEntity.badRequest().body("Password not updated - user not found or other issue");
         }
     }
 
     // Change Username
-    @PutMapping("/changeusername")
-    public ResponseEntity<?> changeUsername(@RequestHeader("Authorized") String token,
-                                            @RequestBody UserDTO newUsernameDTO
-    ) {
+    @PutMapping("/change-username")
+    public ResponseEntity<?> changeUsername(@RequestHeader("Authorization") String token,
+                                            @RequestBody UserDTO newUsernameDTO) {
         String oldUsername = tokenService.getUsernameByToken(token);
         User result = userService.changeUsername(oldUsername, newUsernameDTO.getUsername());
         if (result != null) {
             System.out.println(result);
             tokenService.changeUsernameOfToken(token, newUsernameDTO.getUsername());
-            return ResponseEntity.ok("Username updated successfully" + result);
+            return ResponseEntity.ok("Username updated successfully");
         } else {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Username not updated, possibly already exists");
+            return ResponseEntity.badRequest().body("Username not updated, possibly already exists");
         }
     }
 
     // Get list of all Users
     @GetMapping("/list")
-    public ArrayList<User> getUserList() {
-        return userService.getUserList();
+    public ResponseEntity<?> getUserList(@RequestHeader("Authorization") String token) {
+        if (tokenService.isTokenValid(token)) {
+            String username = tokenService.getUsernameByToken(token);
+            User user = userService.getUser(username);
+            if (user != null) {
+                if (user.getRole() == Role.ADMIN) {
+                    return ResponseEntity.ok("Access to protected resource granted\n" + userService.getUserList());
+                }
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Only Admin has access");
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in or the session has expired");
     }
 }

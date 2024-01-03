@@ -1,12 +1,15 @@
 package tech.titans.hotel.Service;
 
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.titans.hotel.Model.Role;
 import tech.titans.hotel.Model.User;
 import tech.titans.hotel.Repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -18,17 +21,18 @@ public class UserService implements UserServiceInterface {
     @Override
     public void createUser(User user) {
         userRepository.userList.add(user);
-        System.out.println("New User " + user.getFirstName() + " created!");
+        System.out.println("New User " + user.getUsername() + " created!");
     }
 
     // Delete a User
     @Override
-    public void deleteUser(String username) {
-        userRepository.userList.removeIf(user -> user.getUsername().equals(username));
+    public boolean deleteUser(String username) {
+        boolean existed = userRepository.userList.removeIf(user -> user.getUsername().equals(username));
+        System.out.println(existed ? "User deleted." : "User not found.");
+        return existed;
     }
 
     // Check if Username already exists
-
     public boolean usernameExists(String name) {
         return userRepository.userList.stream()
                 .anyMatch(user -> user.getUsername().equalsIgnoreCase(name));
@@ -37,8 +41,13 @@ public class UserService implements UserServiceInterface {
     // Return the userRepository
     @Override
     public ArrayList<User> getUserList() {
-
-        return userRepository.userList;
+        ArrayList<User> userList = new ArrayList<>();
+        for (User user : userRepository.userList) {
+            if (user.getRole() == Role.USER) {
+                userList.add(user);
+            }
+        }
+        return userList;
     }
 
     // Change Password
@@ -78,5 +87,21 @@ public class UserService implements UserServiceInterface {
     public boolean validateUser(String username, String password) {
         return userRepository.userList.stream()
                 .anyMatch(user -> user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password));
+    }
+
+    @PostConstruct
+    private void createAdmin() {
+        User user = new User("Paladin", "Andi", "Latifi", "admin@gmail.com", "secret123");
+        user.setRole(Role.ADMIN);
+        userRepository.userList.add(user);
+    }
+
+    public User getUser(String username) {
+        for (User user : userRepository.userList) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

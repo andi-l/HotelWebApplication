@@ -8,7 +8,7 @@ public interface UserServiceInterface {
 
     public void createUser(User user);
 
-    public void deleteUser(String username);
+    public boolean deleteUser(String username);
 
     public boolean usernameExists(String name);
 

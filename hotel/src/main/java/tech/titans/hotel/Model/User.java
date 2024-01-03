@@ -1,7 +1,5 @@
 package tech.titans.hotel.Model;
 
-import java.util.Objects;
-
 public class User {
 
     private String username;
@@ -9,6 +7,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private Role role;
 
     // Full Constructor
     public User(
@@ -23,8 +22,9 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-
+        this.role = Role.USER;
     }
+
 
     public String getUsername() {
         return this.username;
@@ -69,8 +69,8 @@ public class User {
     @Override
     public String toString() {
         return (
-                "User{" +
-                        " username='" +
+                "User {" +
+                        "username='" +
                         getUsername() +
                         "'" +
                         ", firstName='" +
@@ -85,7 +85,15 @@ public class User {
                         ", password='" +
                         getPassword() +
                         "'" +
-                        "}"
+                        "}\n"
         );
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
