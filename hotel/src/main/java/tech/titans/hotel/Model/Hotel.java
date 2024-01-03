@@ -77,4 +77,13 @@ public class Hotel {
         }
         return rooms;
     }
+
+    public void addBooking(Booking booking) {
+        if (this.bookings == null) {
+            this.bookings = new ArrayList<>();
+        }
+        this.bookings.add(booking);
+    }
+    
+
 }

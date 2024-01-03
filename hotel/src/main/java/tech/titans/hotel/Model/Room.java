@@ -5,11 +5,13 @@ public class Room {
   private String type;
   private double pricePerNight;
   private int capacity;
+  private Hotel hotel;
 
   public Room(String type, double pricePerNight, int capacity) {
     this.type = type;
     this.pricePerNight = pricePerNight;
     this.capacity = capacity;
+    this.hotel = hotel;
   }
 
   public String getType() {
@@ -34,6 +36,16 @@ public class Room {
 
   public void setCapacity(int capacity) {
     this.capacity = capacity;
+  }
+
+
+  public Hotel getHotel() {
+    return hotel;
+  }
+
+  // Setter für die Hotelreferenz
+  public void setHotel(Hotel hotel) {
+    this.hotel = hotel;
   }
 
   @Override
