@@ -91,7 +91,7 @@ public class BookingService {
                     bookingRepository.bookingList.add(newBooking);
     
                     // Remove the booked room from the hotel
-                    // to do hotel.removeRoom(room);
+                    hotelRepository.hotelList.get(0).removeRoom(room);
     
                     return newBooking;
                 }

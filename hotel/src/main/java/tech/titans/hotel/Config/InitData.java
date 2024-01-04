@@ -2,18 +2,24 @@ package tech.titans.hotel.Config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import tech.titans.hotel.Model.Booking;
 import tech.titans.hotel.Model.Hotel;
 import tech.titans.hotel.Model.Room;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import tech.titans.hotel.Repository.*;
+import tech.titans.hotel.Service.BookingService;
 
 @Component
 public class InitData {
 
     @Autowired
     HotelRepository hotelList;
+
+    @Autowired
+    BookingService bookingService;
     
     @PostConstruct
     public void init() {
@@ -40,6 +46,14 @@ public class InitData {
 
         // Print the hotel entries
         System.out.println(hotel1.toString());
+
+        // Verwenden des BookingService, um eine Buchung zu erstellen
+        Booking booking = bookingService.createBooking("Standard ", "2024-04-10", "2024-04-15", 1);
+        if (booking != null) {
+            System.out.println("Buchung erfolgreich erstellt: " + booking);
+        } else {
+            System.out.println("Buchung konnte nicht erstellt werden.");
+        }
 
     }
     }

@@ -17,18 +17,6 @@ import java.util.List;
 public class HotelApplication {
 
     public static void main(String[] args) {
-        // Starten der Spring Boot-Anwendung und Abrufen des Anwendungskontexts
-        ConfigurableApplicationContext context = SpringApplication.run(HotelApplication.class, args);
-
-        // Abrufen des BookingService aus dem Spring-Anwendungskontext
-        BookingService bookingService = context.getBean(BookingService.class);
-
-        // Verwenden des BookingService, um eine Buchung zu erstellen
-        Booking booking = bookingService.createBooking("Standard ", "2024-04-10", "2024-04-15", "hotel1", 1);
-        if (booking != null) {
-            System.out.println("Buchung erfolgreich erstellt: " + booking);
-        } else {
-            System.out.println("Buchung konnte nicht erstellt werden.");
-        }
+        SpringApplication.run(HotelApplication.class, args);
     }
 }
