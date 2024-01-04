@@ -3,6 +3,9 @@ package tech.titans.hotel.Model;
 import java.util.Date;
 
 public class Booking {
+    private static int counter = 0;
+
+    private int id;
     private String roomType;
     private int roomCapacity;
     private Date checkInDate;
@@ -11,6 +14,7 @@ public class Booking {
     
 
     public Booking(String roomType, Date checkInDate, Date checkOutDate, int roomCapacity) {
+        this.id = counter++;
         this.roomType = roomType;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
@@ -57,4 +61,16 @@ public class Booking {
     public void setRoomCapacity(int roomCapacity){
         this.roomCapacity = roomCapacity;
     }
+
+    public int getID(){
+        return this.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking [id=" + id + ", roomType=" + roomType + ", roomCapacity=" + roomCapacity + ", checkInDate="
+                + checkInDate + ", checkOutDate=" + checkOutDate + ", hotelName=" + hotelName + "]";
+    }
+
+    
 }

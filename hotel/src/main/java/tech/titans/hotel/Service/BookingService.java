@@ -5,8 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import tech.titans.hotel.Model.*;
@@ -31,11 +34,12 @@ public class BookingService {
             // check availability and return available rooms
             for (Hotel hotel : getAllHotels()) {
                 for (Room room : hotel.getRooms()) {
-                    if (room.getCapacity() == capacity && isRoomAvailable(capacity, checkInDate, checkOutDate)) {
+                    if (room.getCapacity() == capacity && room.isClean() && isRoomAvailable(capacity, checkInDate, checkOutDate)) {
                         availableRooms.add(room);
-                    }
+                        System.out.println("Verfügbarer und sauberer Raum: " + room);
                 }
             }
+        }
 
             return availableRooms;
         } catch (ParseException e) {
@@ -48,20 +52,18 @@ public class BookingService {
     private boolean isRoomAvailable(int capacity, Date checkInDate, Date checkOutDate) {
         for (Hotel hotel : getAllHotels()) {
             for (Booking booking : hotel.getBookings()) {
-                if (booking.getRoomCapacity() != capacity) {
-                    continue; // Skip bookings for rooms with different capacity
-                }
-
-                // Check specific dates
-                if (booking.getCheckInDate().after(checkOutDate) || booking.getCheckOutDate().before(checkInDate)) {
-                    continue;
-                } else {
-                    return false; // No rooms available
+                if (booking.getRoomCapacity() == capacity) {
+                    if (!(booking.getCheckInDate().after(checkOutDate) || booking.getCheckOutDate().before(checkInDate))) {
+                        // Überschneidung gefunden, Raum ist nicht verfügbar
+                        System.out.println("Keine verfügbaren Räume in dem Zeitraum");
+                        return false;
+                    }
                 }
             }
         }
-        return true; // Rooms available
+        return true; // Keine Überschneidungen gefunden, Raum ist verfügbar
     }
+    
 
     public List<Hotel> getAllHotels() {
         return hotelRepository.hotelList;
@@ -82,7 +84,7 @@ public class BookingService {
             Date checkOutDate = parseDate(checkOutDateString);
     
             List<Room> availableRooms = checkAvailability(checkInDateString, checkOutDateString, capacity);
-    
+            //System.out.println(availableRooms);
             for (Room room : availableRooms) {
                 if (room.getType().equals(roomType)) {
                     Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, capacity);
@@ -90,15 +92,13 @@ public class BookingService {
                     // Add the booking to the hotel
                     bookingRepository.bookingList.add(newBooking);
     
-                    // Remove the booked room from the hotel
-                    hotelRepository.hotelList.get(0).removeRoom(room);
-    
+                    // Mark room as notClean so its not available
+                    room.setClean(false);
+                    System.out.println("Erfolgreiche Buchung: " + newBooking);
                     return newBooking;
                 }
             }
-
-            // Wenn kein Zimmer verfügbar ist
-            System.out.println("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien");
+            System.out.println("Keine Buchung möglich");
             return null;
 
         } catch (ParseException e) {
@@ -106,4 +106,35 @@ public class BookingService {
             return null;
         }
     }
+
+    @Scheduled(cron = "0 0 12 * * ?") // Reinigung jeden Tag um 12:00 Uhr
+public void cleanRooms() {
+    LocalDate today = LocalDate.now();
+    for (Hotel hotel : getAllHotels()) {
+        for (Room room : hotel.getRooms()) {
+            boolean isRoomCurrentlyBooked = hotel.getBookings().stream()
+                    .anyMatch(booking -> booking.getRoomType().equals(room.getType()) &&
+                            booking.getCheckInDate().before(Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant())) &&
+                            booking.getCheckOutDate().after(Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+
+            if (!isRoomCurrentlyBooked) {
+                room.setClean(true);
+                System.out.println("Zimmer gereinigt: " + room);
+            }
+        }
+    }
+}
+public void cleanRoom(String roomType) {
+    for (Hotel hotel : getAllHotels()) {
+        for (Room room : hotel.getRooms()) {
+            if (room.getType() == roomType) {
+                room.setClean(true);
+                System.out.println("Zimmer gereinigt und wieder verfügbar: " + room);
+                return;
+            }
+        }
+    }
+    System.out.println("Zimmer mit dem Typ" + roomType + " nicht gefunden.");
+}
+
 }

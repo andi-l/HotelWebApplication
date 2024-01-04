@@ -3,6 +3,7 @@ package tech.titans.hotel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import tech.titans.hotel.Model.Booking;
 import tech.titans.hotel.Model.Hotel;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
+@EnableScheduling
 public class HotelApplication {
 
     public static void main(String[] args) {

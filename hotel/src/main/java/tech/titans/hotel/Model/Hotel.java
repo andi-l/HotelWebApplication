@@ -84,6 +84,13 @@ public class Hotel {
         }
         this.bookings.add(booking);
     }
-    
 
+
+    @Override
+    public String toString() {
+        return "Hotel [name=" + name + ", location=" + location + ", bookings=" + bookings + ", rooms=" + rooms
+                + ", rating=" + rating + ", allratings=" + allratings + "]";
+    }
+    
+    
 }

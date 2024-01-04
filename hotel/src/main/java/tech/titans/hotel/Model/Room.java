@@ -6,12 +6,14 @@ public class Room {
   private double pricePerNight;
   private int capacity;
   private Hotel hotel;
+  private boolean isClean;
 
   public Room(String type, double pricePerNight, int capacity) {
     this.type = type;
     this.pricePerNight = pricePerNight;
     this.capacity = capacity;
     this.hotel = hotel;
+    this.isClean = true;
   }
 
   public String getType() {
@@ -38,15 +40,13 @@ public class Room {
     this.capacity = capacity;
   }
 
+  public boolean isClean() {
+    return isClean;
+}
 
-  public Hotel getHotel() {
-    return hotel;
-  }
-
-  // Setter für die Hotelreferenz
-  public void setHotel(Hotel hotel) {
-    this.hotel = hotel;
-  }
+public void setClean(boolean clean) {
+    isClean = clean;
+}
 
   @Override
   public String toString() {

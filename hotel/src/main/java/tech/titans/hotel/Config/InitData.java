@@ -9,6 +9,10 @@ import tech.titans.hotel.Model.Room;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import tech.titans.hotel.Repository.*;
 import tech.titans.hotel.Service.BookingService;
 
@@ -16,10 +20,13 @@ import tech.titans.hotel.Service.BookingService;
 public class InitData {
 
     @Autowired
-    HotelRepository hotelList;
+    HotelRepository hotelRepository;
 
     @Autowired
     BookingService bookingService;
+
+    @Autowired
+    BookingRepository bookingRepository;
     
     @PostConstruct
     public void init() {
@@ -42,18 +49,25 @@ public class InitData {
         hotel1.getRooms().add(room3);
 
         // Add Hotel 1 to the repository
-        hotelList.addHotel(hotel1);
+        hotelRepository.addHotel(hotel1);
 
-        // Print the hotel entries
-        System.out.println(hotel1.toString());
+        //Print the hotel entries
+        //System.out.println(hotelRepository.hotelList.get(0));
 
         // Verwenden des BookingService, um eine Buchung zu erstellen
-        Booking booking = bookingService.createBooking("Standard ", "2024-04-10", "2024-04-15", 1);
-        if (booking != null) {
-            System.out.println("Buchung erfolgreich erstellt: " + booking);
-        } else {
+        // List<Room> testRooms = bookingService.checkAvailability("2024-01-10", "2024-01-15", 2);
+        // System.out.println(testRooms);
+
+        Booking booking = bookingService.createBooking("Standard Double", "2024-01-10", "2024-01-15", 2);
+        if (booking == null) {
             System.out.println("Buchung konnte nicht erstellt werden.");
         }
 
+        bookingService.cleanRooms();
+
+        Booking booking2 = bookingService.createBooking("Standard Double", "2024-01-15", "2024-01-20", 2);
+        if (booking2 == null) {
+            System.out.println("Buchung konnte nicht erstellt werden.");
+        }
     }
     }
