@@ -56,5 +56,18 @@ public class Booking {
 
     public void setRoomCapacity(int roomCapacity){
         this.roomCapacity = roomCapacity;
+ 
     }
+
+    @Override
+public String toString() {
+    return "Booking{" +
+           "roomType='" + roomType + '\'' +
+           ", roomCapacity=" + roomCapacity +
+           ", checkInDate=" + checkInDate +
+           ", checkOutDate=" + checkOutDate +
+           ", hotelName='" + hotelName + '\'' +
+           '}';
+}
+
 }

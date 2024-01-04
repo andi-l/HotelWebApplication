@@ -1,8 +1,11 @@
 package tech.titans.hotel.Config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+import tech.titans.hotel.HotelApplication;
 import tech.titans.hotel.Model.Booking;
 import tech.titans.hotel.Model.Hotel;
 import tech.titans.hotel.Model.Room;
@@ -46,14 +49,24 @@ public class InitData {
 
         // Print the hotel entries
         System.out.println(hotel1.toString());
-
-        // Verwenden des BookingService, um eine Buchung zu erstellen
-        Booking booking = bookingService.createBooking("Standard ", "2024-04-10", "2024-04-15", 1);
-        if (booking != null) {
-            System.out.println("Buchung erfolgreich erstellt: " + booking);
-        } else {
-            System.out.println("Buchung konnte nicht erstellt werden.");
+    }
+ 
+    // Verwenden des BookingService, um eine Buchung zu erstellen
+        public static void main(String[] args) {
+            // Starten der Spring Boot-Anwendung und Abrufen des Anwendungskontexts
+            ConfigurableApplicationContext context = SpringApplication.run(HotelApplication.class, args);
+    
+            // Abrufen des BookingService aus dem Spring-Anwendungskontext
+            BookingService bookingService = context.getBean(BookingService.class);
+    
+            // Verwenden des BookingService, um eine Buchung zu erstellen
+            Booking booking = bookingService.createBooking("Standard Double", "2023-04-01", "2023-04-06", 2);
+            if (booking != null) {
+                System.out.println("Buchung erfolgreich erstellt: " + booking);
+            } else {
+                System.out.println("Buchung konnte nicht erstellt werden.");
+            }
         }
-
+    
     }
-    }
+    
