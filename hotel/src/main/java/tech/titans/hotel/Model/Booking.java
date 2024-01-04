@@ -60,6 +60,7 @@ public class Booking {
 
     public void setRoomCapacity(int roomCapacity){
         this.roomCapacity = roomCapacity;
+ 
     }
 
     public int getID(){
@@ -71,6 +72,4 @@ public class Booking {
         return "Booking [id=" + id + ", roomType=" + roomType + ", roomCapacity=" + roomCapacity + ", checkInDate="
                 + checkInDate + ", checkOutDate=" + checkOutDate + ", hotelName=" + hotelName + "]";
     }
-
-    
 }

@@ -1,8 +1,11 @@
 package tech.titans.hotel.Config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+import tech.titans.hotel.HotelApplication;
 import tech.titans.hotel.Model.Booking;
 import tech.titans.hotel.Model.Hotel;
 import tech.titans.hotel.Model.Room;
@@ -70,4 +73,4 @@ public class InitData {
             System.out.println("Buchung konnte nicht erstellt werden.");
         }
     }
-    }
+}
