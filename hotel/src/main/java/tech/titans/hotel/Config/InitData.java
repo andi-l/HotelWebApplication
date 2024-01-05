@@ -62,12 +62,15 @@ public class InitData {
         // System.out.println(testRooms);
 
         Booking booking = bookingService.createBooking("Standard Double", "2024-01-03", "2024-01-07", 2);
-        if (booking == null) {
+        if (booking != null) {
+            hotel1.addBooking(booking);
+        } else {
             System.out.println("Buchung konnte nicht erstellt werden.");
         }
 
        bookingService.cleanRooms();
 
+      
  //       Booking booking2 = bookingService.createBooking("Standard Double", "2024-01-15", "2024-01-20", 2);
      //   if (booking2 == null) {
        //     System.out.println("Buchung konnte nicht erstellt werden.");

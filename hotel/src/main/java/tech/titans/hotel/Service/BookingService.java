@@ -106,27 +106,30 @@ public class BookingService {
             return null;
         }
     }
-// man brauct keine 2 te For-Sleife, da es nur ein Hotel gibt
+    
     @Scheduled(cron = "0 0 12 * * ?") // Reinigung jeden Tag um 12:00 Uhr
-public void cleanRooms() {
-    // Heutiges Datum in UTC
-    LocalDate today = LocalDate.now(ZoneId.of("UTC"));
-    Date todayDate = Date.from(today.atStartOfDay(ZoneId.of("UTC")).toInstant());
-
-    for (Hotel hotel : getAllHotels()) {
-        for (Room room : hotel.getRooms()) {
-            boolean isRoomCurrentlyBooked = hotel.getBookings().stream()
-                .anyMatch(booking -> booking.getRoomType().equals(room.getType()) &&
-                        !booking.getCheckInDate().after(todayDate) &&
-                        booking.getCheckOutDate().after(todayDate));
-
-            if (!isRoomCurrentlyBooked) {
-                room.setClean(true);
-                System.out.println("Zimmer gereinigt: " + room);
+    public void cleanRooms() {
+        // Heutiges Datum in UTC
+        LocalDate today = LocalDate.now(ZoneId.of("UTC"));
+        Date todayDate = Date.from(today.atStartOfDay(ZoneId.of("UTC")).toInstant());
+    
+        for (Hotel hotel : getAllHotels()) {
+            for (Room room : hotel.getRooms()) {
+                if (!isRoomBookedToday(hotel, room, todayDate)) {
+                    room.setClean(true);
+                    System.out.println("Zimmer gereinigt: " + room);
+                }
             }
         }
     }
-}
+    
+    private boolean isRoomBookedToday(Hotel hotel, Room room, Date todayDate) {
+        return hotel.getBookings().stream()
+            .anyMatch(booking -> booking.getRoomType().equals(room.getType()) &&
+                    booking.getCheckInDate().compareTo(todayDate) <= 0 &&
+                    booking.getCheckOutDate().compareTo(todayDate) > 0);
+    }
+        
 
 //auch hier keien 2 te Forschleige, da es keine 2 tes hotel gibt 
 public void cleanRoom(String roomType) {
