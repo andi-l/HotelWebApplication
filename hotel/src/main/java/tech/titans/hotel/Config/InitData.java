@@ -61,16 +61,17 @@ public class InitData {
         // List<Room> testRooms = bookingService.checkAvailability("2024-01-10", "2024-01-15", 2);
         // System.out.println(testRooms);
 
-        Booking booking = bookingService.createBooking("Standard Double", "2024-01-10", "2024-01-15", 2);
+        Booking booking = bookingService.createBooking("Standard Double", "2024-01-03", "2024-01-07", 2);
         if (booking == null) {
             System.out.println("Buchung konnte nicht erstellt werden.");
         }
 
-        bookingService.cleanRooms();
+       bookingService.cleanRooms();
 
-        Booking booking2 = bookingService.createBooking("Standard Double", "2024-01-15", "2024-01-20", 2);
-        if (booking2 == null) {
-            System.out.println("Buchung konnte nicht erstellt werden.");
-        }
-    }
+ //       Booking booking2 = bookingService.createBooking("Standard Double", "2024-01-15", "2024-01-20", 2);
+     //   if (booking2 == null) {
+       //     System.out.println("Buchung konnte nicht erstellt werden.");
+   //     }
+   // }
+}
 }
