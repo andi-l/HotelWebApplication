@@ -1,5 +1,9 @@
 package tech.titans.hotel.Service;
 
+import org.springframework.stereotype.Service;
+//import tech.titans.hotel.Model.User;
+//import tech.titans.hotel.Model.RatingRepository;
+import tech.titans.hotel.Model.Rating;
 import java.util.Scanner;
 import java.util.ArrayList;
 
