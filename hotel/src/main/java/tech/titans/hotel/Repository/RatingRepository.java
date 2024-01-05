@@ -1,12 +1,19 @@
+package tech.titans.hotel.Repository;
 
-package fra.uas.Repository;
 
-import fra.uas.Room.Model.Room;
 import java.util.ArrayList;
+
 import org.springframework.stereotype.Repository;
+import tech.titans.hotel.Model.Rating;
 
 @Repository
 public class RatingRepository {
+<<<<<<< Updated upstream
     
     public ArrayList<Rating> RatingList = new ArrayList<>();
 }
+=======
+
+    public ArrayList<Rating> ratingArrayList = new ArrayList<>();
+}
+>>>>>>> Stashed changes
