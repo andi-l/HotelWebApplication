@@ -1,7 +1,6 @@
 package tech.titans.hotel.Controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 import tech.titans.hotel.Model.Rating;
@@ -26,9 +25,9 @@ public class RatingController {
 
 
     @PostMapping("/add")
-    public String addRating(@RequestBody Rating rating) {
+    public ArrayList<Rating> addRating(@RequestBody Rating rating) {
         ratingService.addRating(rating);
-        return "Rating added successfully!";
+        return ratingService.ratingRepository.ratingArrayList;
     }
 }
 
