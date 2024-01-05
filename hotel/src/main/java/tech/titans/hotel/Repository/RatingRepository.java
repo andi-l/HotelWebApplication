@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RatingRepository {
     
-    public ArrayList<Rating> userList = new ArrayList<>();
+    public ArrayList<Rating> RatingList = new ArrayList<>();
 }
