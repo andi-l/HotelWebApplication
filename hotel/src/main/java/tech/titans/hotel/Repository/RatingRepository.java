@@ -9,8 +9,7 @@ import tech.titans.hotel.Model.Rating;
 @Repository
 public class RatingRepository {
 
-
-
     public ArrayList<Rating> ratingArrayList = new ArrayList<>();
+    
 }
 

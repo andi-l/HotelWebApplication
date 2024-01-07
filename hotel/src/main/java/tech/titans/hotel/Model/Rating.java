@@ -13,6 +13,10 @@ public class Rating{
         this.stars = stars;
     }
 
+    public Rating(String comment) {
+        this.comment = comment;
+    }
+
 
     public int getStars() {
         return this.stars;
@@ -30,3 +34,4 @@ public class Rating{
         this.comment = comment;
     }
 }
+

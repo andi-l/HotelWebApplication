@@ -1,35 +1,42 @@
 package tech.titans.hotel.Controller;
 
-import java.util.ArrayList;
-
-import org.springframework.web.bind.annotation.*;
-import tech.titans.hotel.Model.Rating;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
+import tech.titans.hotel.Model.Rating;
 import tech.titans.hotel.Service.RatingService;
 
 @RestController
-@RequestMapping("/ratings")
+@RequestMapping("/api/ratings")
 public class RatingController {
 
+    private final RatingService ratingService;
+
     @Autowired
-    public RatingService ratingService;
-
-    //@GetMapping("/bewertungen")
-    //@ResponseBody
-    //public List<Integer> getRatings() {
-        //return rating;
-    //}
-
+    public RatingController(RatingService ratingService) {
+        this.ratingService = ratingService;
+    }
 
     @PostMapping("/add")
-    public ArrayList<Rating> addRating(@RequestBody Rating rating) {
+    public void addRating(@RequestBody Rating rating) {
         ratingService.addRating(rating);
-        return ratingService.ratingRepository.ratingArrayList;
+    }
+
+    @PostMapping("/average")
+    public void getAverage() {
+        ratingService.getAverage();
+    }
+
+    @PostMapping("/comment")
+    public void leaveComment(@RequestParam int starsRating, @RequestParam String comment) {
+        ratingService.leaveComment(starsRating, comment);
     }
 }
+
+
 
 
 
