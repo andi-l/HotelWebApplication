@@ -18,6 +18,7 @@ import java.time.ZoneId;
 
 import tech.titans.hotel.Repository.*;
 import tech.titans.hotel.Service.BookingService;
+import tech.titans.hotel.Service.InvoiceService;
 
 @Component
 public class InitData {
@@ -30,11 +31,11 @@ public class InitData {
 
     @Autowired
     BookingRepository bookingRepository;
-    
+
+    private InvoiceService invoiceService;
+
     @PostConstruct
     public void init() {
-
-        
 
         // Create Hotel 1
         Hotel hotel1 = new Hotel("Hotel1", "Location A", 4.5, new ArrayList<>(), new ArrayList<>());
@@ -54,27 +55,32 @@ public class InitData {
         // Add Hotel 1 to the repository
         hotelRepository.addHotel(hotel1);
 
-        //Print the hotel entries
-        //System.out.println(hotelRepository.hotelList.get(0));
+        // Print the hotel entries
+        // System.out.println(hotelRepository.hotelList.get(0));
 
         // Verwenden des BookingService, um eine Buchung zu erstellen
-        // List<Room> testRooms = bookingService.checkAvailability("2024-01-10", "2024-01-15", 2);
+        // List<Room> testRooms = bookingService.checkAvailability("2024-01-10",
+        // "2024-01-15", 2);
         // System.out.println(testRooms);
 
-        Booking booking = bookingService.createBooking("Standard Double", "2024-01-03", "2024-01-07", 2);
+        Booking booking = bookingService.createBooking("Standard Double", "2024-01-03", "2024-01-10", 2);
         if (booking != null) {
             hotel1.addBooking(booking);
+            invoiceService = new InvoiceService(bookingRepository, hotelRepository);
+
+            // Erzeugen Sie eine Rechnung für die erstellte Buchung
+            invoiceService.generateInvoice(booking.getID());
         } else {
             System.out.println("Buchung konnte nicht erstellt werden.");
         }
 
-       bookingService.cleanRooms();
+        bookingService.cleanRooms();
 
-      
- //       Booking booking2 = bookingService.createBooking("Standard Double", "2024-01-15", "2024-01-20", 2);
-     //   if (booking2 == null) {
-       //     System.out.println("Buchung konnte nicht erstellt werden.");
-   //     }
-   // }
-}
+        // Booking booking2 = bookingService.createBooking("Standard Double",
+        // "2024-01-15", "2024-01-20", 2);
+        // if (booking2 == null) {
+        // System.out.println("Buchung konnte nicht erstellt werden.");
+        // }
+        // }
+    }
 }
