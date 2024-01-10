@@ -3,7 +3,7 @@ package tech.titans.hotel.Model;
 import java.util.Date;
 
 public class Booking {
-    private static int counter = 0;
+    private static int counter = 1;
 
     private int id;
     private String roomType;
@@ -19,7 +19,7 @@ public class Booking {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.roomCapacity = roomCapacity;
-        this.hotelName = "HotelA";
+        this.hotelName = "Tech Titans Hotel";
     }
 
     public String getRoomType() {

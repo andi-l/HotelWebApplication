@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,8 +34,10 @@ public class BookingService {
 
     public List<Room> checkAvailability(String checkInDateString, String checkOutDateString, int capacity) {
     try {
-        Date checkInDate = parseDate(checkInDateString);
-        Date checkOutDate = parseDate(checkOutDateString);
+
+        //parsing checkIn & checkOut Date including Hours
+        Date checkInDate = parseDate(checkInDateString, 15);
+        Date checkOutDate = parseDate(checkOutDateString, 13);
 
         // Convert current dates to LocalDate for comparison
         LocalDate today = LocalDate.now(ZoneId.systemDefault());
@@ -51,9 +54,9 @@ public class BookingService {
         // Checking availability
         for (Hotel hotel : hotelRepository.getAllHotels()) {
             for (Room room : hotel.getRooms()) {
-                if (room.getCapacity() == capacity && room.isClean() && isRoomAvailable(capacity, checkInDate, checkOutDate)) {
+                if (room.getCapacity() == capacity && isRoomAvailable(capacity, checkInDate, checkOutDate)) {
                     availableRooms.add(room);
-                    logger.info("Verfügbarer und sauberer Raum: {}", room);
+                    logger.info("Verfügbarer und sauberer Raum: ", room);
                 }
             }
         }
@@ -85,18 +88,17 @@ public class BookingService {
         return bookingRepository.bookingList;
     }
 
-    private Date parseDate(String dateString) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.parse(dateString);
+    private Date parseDate(String dateString, int hour) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH");
+        return dateFormat.parse(dateString + " " + hour);
     }
     
     public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, int capacity) {
         try {
-            Date checkInDate = parseDate(checkInDateString);
-            Date checkOutDate = parseDate(checkOutDateString);
+            Date checkInDate = parseDate(checkInDateString, 15);
+            Date checkOutDate = parseDate(checkOutDateString, 13);
     
             List<Room> availableRooms = checkAvailability(checkInDateString, checkOutDateString, capacity);
-            //System.out.println(availableRooms);
             for (Room room : availableRooms) {
                 if (room.getType().equals(roomType)) {
                     Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, capacity);
@@ -119,27 +121,21 @@ public class BookingService {
         }
     }
     
-    @Scheduled(cron = "0 0 12 * * ?") // Reinigung jeden Tag um 12:00 Uhr
-    public void cleanRooms() {
-        // Heutiges Datum in UTC
-        LocalDate today = LocalDate.now(ZoneId.of("UTC"));
-        Date todayDate = Date.from(today.atStartOfDay(ZoneId.of("UTC")).toInstant());
-    
+    @Scheduled(cron = "0 * * * * *") // Jede Minute überprüfen
+    public void markRoomsAsCleanAfterCheckOut() {
+        Date now = new Date();
         for (Hotel hotel : hotelRepository.getAllHotels()) {
             for (Room room : hotel.getRooms()) {
-                if (!isRoomBookedToday(hotel, room, todayDate)) {
-                    room.setClean(true);
-                    logger.info("Zimmer gereinigt: " + room);
+                for (Booking booking : hotel.getBookings()) {
+                    if (booking.getRoomType().equals(room.getType()) && 
+                        now.after(booking.getCheckOutDate()) && 
+                        !room.isClean()) {
+                        room.setClean(true);
+                        logger.info("Zimmer nach Check-Out als sauber markiert: " +  room);
+                    }
                 }
             }
         }
-    }
-    
-    private boolean isRoomBookedToday(Hotel hotel, Room room, Date todayDate) {
-        return hotel.getBookings().stream()
-            .anyMatch(booking -> booking.getRoomType().equals(room.getType()) &&
-                    booking.getCheckInDate().compareTo(todayDate) <= 0 &&
-                    booking.getCheckOutDate().compareTo(todayDate) > 0);
     }
         
 

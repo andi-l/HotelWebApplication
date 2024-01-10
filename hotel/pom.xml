@@ -37,7 +37,7 @@
             <artifactId>javax.annotation-api</artifactId>
             <version>1.3.2</version>
         </dependency>
-        <!-- Swagger UI dependencies removed -->
+
     </dependencies>
 
     <build>

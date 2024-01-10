@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.titans.hotel.Service.BookingService;
-import tech.titans.hotel.DTO.BookingDTO;
+import tech.titans.hotel.Service.*;
+import tech.titans.hotel.DTO.*;
 import tech.titans.hotel.Model.*;
 
 import java.util.List;
@@ -16,6 +16,9 @@ public class Controller {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private InvoiceService invoiceService;
 
     @GetMapping(value = "/availability", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> checkAvailability(
@@ -45,7 +48,7 @@ public class Controller {
             if (newBooking == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
             } else {
-                return ResponseEntity.status(HttpStatus.CREATED).body(newBooking);
+                return ResponseEntity.status(HttpStatus.CREATED).body("Erfolgreiche Buchung:" + newBooking);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fehler bei der Erstellung der Buchung: " + e.getMessage());
@@ -61,5 +64,14 @@ public class Controller {
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(bookings);
         }
+    }
+
+    @GetMapping("/invoice/{bookingId}")
+    public ResponseEntity<?> generateInvoice(@PathVariable int bookingId) {
+        InvoiceDTO invoice = invoiceService.generateInvoice(bookingId);
+        if (invoice == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buchung nicht gefunden oder Fehler bei der Erstellung der Rechnung.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Rechnung" + invoice);
     }
 }

@@ -1,36 +1,40 @@
 package tech.titans.hotel.Service;
 
-import tech.titans.hotel.Model.Booking;
-import tech.titans.hotel.Repository.BookingRepository;
-import tech.titans.hotel.Repository.HotelRepository;
-import tech.titans.hotel.Model.Hotel;
-import tech.titans.hotel.Model.Room;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import tech.titans.hotel.DTO.InvoiceDTO;
+import tech.titans.hotel.Repository.*;
+import tech.titans.hotel.Model.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Optional;
 
+@Service
 public class InvoiceService {
 
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceService.class);
+
+    @Autowired
     private BookingRepository bookingRepository;
+
+    @Autowired
     private HotelRepository hotelRepository;
 
-    public InvoiceService(BookingRepository bookingRepository, HotelRepository hotelRepository) {
-        this.bookingRepository = bookingRepository;
-        this.hotelRepository = hotelRepository;
-    }
-
-    public void generateInvoice(int bookingId) {
+    public InvoiceDTO generateInvoice(int bookingId) {
         Optional<Booking> bookingOptional = findBookingById(bookingId);
 
-        if (bookingOptional.isPresent()) {
-            Booking booking = bookingOptional.get();
-            long daysStayed = (booking.getCheckOutDate().getTime() - booking.getCheckInDate().getTime()) / (1000 * 60 * 60 * 24);
-            double totalCost = daysStayed * calculatePricePerNight(booking);
-
-            printInvoiceDetails(booking, totalCost);
-        } else {
-            System.out.println("Buchung nicht gefunden.");
+        if (!bookingOptional.isPresent()) {
+            logger.info("Buchung nicht gefunden.");
+            return null; // Oder eine geeignete Exception werfen
         }
+
+        Booking booking = bookingOptional.get();
+        long daysStayed = (booking.getCheckOutDate().getTime() - booking.getCheckInDate().getTime()) / (1000 * 60 * 60 * 24);
+        double totalCost = daysStayed * calculatePricePerNight(booking);
+
+        return createInvoiceDTO(booking, totalCost);
     }
 
     private Optional<Booking> findBookingById(int bookingId) {
@@ -50,12 +54,14 @@ public class InvoiceService {
         return 0.0; // Standardwert, falls kein Zimmer gefunden wird
     }
 
-    private void printInvoiceDetails(Booking booking, double totalCost) {
+    private InvoiceDTO createInvoiceDTO(Booking booking, double totalCost) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println("Rechnung für Buchung ID: " + booking.getID());
-        System.out.println("Zimmertyp: " + booking.getRoomType());
-        System.out.println("Check-In Datum: " + dateFormat.format(booking.getCheckInDate()));
-        System.out.println("Check-Out Datum: " + dateFormat.format(booking.getCheckOutDate()));
-        System.out.println("Gesamtkosten: " + totalCost + " EUR");
+        InvoiceDTO invoice = new InvoiceDTO();
+        invoice.setBookingId(booking.getID());
+        invoice.setRoomType(booking.getRoomType());
+        invoice.setCheckInDate(dateFormat.format(booking.getCheckInDate()));
+        invoice.setCheckOutDate(dateFormat.format(booking.getCheckOutDate()));
+        invoice.setTotalCost(totalCost);
+        return invoice;
     }
 }
