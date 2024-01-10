@@ -53,8 +53,12 @@ public class Controller {
     }
 
     @GetMapping(value = "/booking", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Booking>> getAllBookings() {
+    public ResponseEntity<?> getAllBookings() {
         List<Booking> bookings = bookingService.getAllBookings();
-        return ResponseEntity.ok(bookings);
+        if (bookings == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(bookings);
+        }
     }
 }

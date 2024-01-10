@@ -32,7 +32,7 @@ public class BookingService {
             List<Room> availableRooms = new ArrayList<>();
 
             // check availability and return available rooms
-            for (Hotel hotel : getAllHotels()) {
+            for (Hotel hotel : hotelRepository.getAllHotels()) {
                 for (Room room : hotel.getRooms()) {
                     if (room.getCapacity() == capacity && room.isClean() && isRoomAvailable(capacity, checkInDate, checkOutDate)) {
                         availableRooms.add(room);
@@ -50,7 +50,7 @@ public class BookingService {
     }
 
     private boolean isRoomAvailable(int capacity, Date checkInDate, Date checkOutDate) {
-        for (Hotel hotel : getAllHotels()) {
+        for (Hotel hotel : hotelRepository.getAllHotels()) {
             for (Booking booking : hotel.getBookings()) {
                 if (booking.getRoomCapacity() == capacity) {
                     if (!(booking.getCheckInDate().after(checkOutDate) || booking.getCheckOutDate().before(checkInDate))) {
@@ -62,11 +62,6 @@ public class BookingService {
             }
         }
         return true; // Keine Überschneidungen gefunden, Raum ist verfügbar
-    }
-    
-
-    public List<Hotel> getAllHotels() {
-        return hotelRepository.hotelList;
     }
 
     public List<Booking> getAllBookings() {
@@ -113,7 +108,7 @@ public class BookingService {
         LocalDate today = LocalDate.now(ZoneId.of("UTC"));
         Date todayDate = Date.from(today.atStartOfDay(ZoneId.of("UTC")).toInstant());
     
-        for (Hotel hotel : getAllHotels()) {
+        for (Hotel hotel : hotelRepository.getAllHotels()) {
             for (Room room : hotel.getRooms()) {
                 if (!isRoomBookedToday(hotel, room, todayDate)) {
                     room.setClean(true);
@@ -133,7 +128,7 @@ public class BookingService {
 
 //auch hier keien 2 te Forschleige, da es keine 2 tes hotel gibt 
 public void cleanRoom(String roomType) {
-    for (Hotel hotel : getAllHotels()) {
+    for (Hotel hotel : hotelRepository.getAllHotels()) {
         for (Room room : hotel.getRooms()) {
             if (room.getType() == roomType) {
                 room.setClean(true);
