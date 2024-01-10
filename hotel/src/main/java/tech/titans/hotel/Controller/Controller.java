@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.titans.hotel.Service.BookingService;
+import tech.titans.hotel.DTO.BookingDTO;
 import tech.titans.hotel.Model.*;
 
 import java.util.List;
@@ -31,16 +32,15 @@ public class Controller {
         }
     }
 
-    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBooking(
-            @RequestParam("roomType") String roomType,
-            @RequestParam("checkInDate") String checkInDateString,
-            @RequestParam("checkOutDate") String checkOutDateString,
-            // @RequestParam("hotelName") String hotelName,
-            @RequestParam("capacity") int capacity) {
+    @PostMapping(value = "/booking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest) {
         
         try {
-            Booking newBooking = bookingService.createBooking(roomType, checkInDateString, checkOutDateString, capacity);
+            Booking newBooking = bookingService.createBooking(
+                    bookingRequest.getRoomType(), 
+                    bookingRequest.getCheckInDate(), 
+                    bookingRequest.getCheckOutDate(), 
+                    bookingRequest.getCapacity());
 
             if (newBooking == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
@@ -51,6 +51,7 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fehler bei der Erstellung der Buchung: " + e.getMessage());
         }
     }
+
 
     @GetMapping(value = "/booking", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllBookings() {
