@@ -3,7 +3,7 @@ package tech.titans.hotel.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import tech.titans.hotel.Model.Rating;
+import tech.titans.hotel.Model.Review;
 import tech.titans.hotel.Repository.RatingRepository;
 import tech.titans.hotel.Service.RatingService;
 
@@ -24,7 +24,7 @@ public class InitData {
     public void init() {
 
         
-        Rating rating1 = new Rating(3, "hallo");
+        Review review1 = new Review(3, "hallo");
 
 
 

@@ -1,22 +1,13 @@
 package tech.titans.hotel.Model;
 
-public class Rating{
+public class Review {
     int stars;
     String comment;
 
-    public Rating(int stars, String comment) {
+    public Review(int stars, String comment) {
         this.stars = stars;
         this.comment = comment;
     }
-
-    public Rating(int stars) {
-        this.stars = stars;
-    }
-
-    public Rating(String comment) {
-        this.comment = comment;
-    }
-
 
     public int getStars() {
         return this.stars;
@@ -33,5 +24,12 @@ public class Rating{
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    @Override
+    public String toString() {
+        return "[" + "stars = " + stars +
+                ", comment ='" + comment + '\'' + "]";
+    }
+
 }
 

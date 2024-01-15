@@ -9,15 +9,15 @@ public class Hotel {
     ArrayList<Room> availablerooms; 
     ArrayList<Room> bookedrooms;
     double rating;
-    ArrayList<Rating> allratings;
+    ArrayList<Review> allratings;
 
-    public Hotel(String name, String location, double rating, ArrayList<Room> availablerooms, ArrayList<Room> bookedrooms, ArrayList<Rating> allRatings) {
+    public Hotel(String name, String location, double rating, ArrayList<Room> availablerooms, ArrayList<Room> bookedrooms, ArrayList<Review> allReviews) {
         this.name = name;
         this.location = location;
         this.rating = rating;
         this.availablerooms  = new ArrayList<Room>();
         this.bookedrooms = new ArrayList<Room>(); 
-        this.allratings = new ArrayList<Rating>();
+        this.allratings = new ArrayList<Review>();
     }
 
 
@@ -64,11 +64,11 @@ public class Hotel {
     }
 
 
-    public ArrayList<Rating> getAllratings() {
+    public ArrayList<Review> getAllratings() {
         return this.allratings;
     }
 
-    public void setAllratings(ArrayList<Rating> allratings) {
+    public void setAllratings(ArrayList<Review> allratings) {
         this.allratings = allratings;
     }
 

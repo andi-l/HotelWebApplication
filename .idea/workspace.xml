@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8888d5a2-1071-4d8c-8961-1035b6d71a8c" name="Changes" comment="added gitignore">
+      <change afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/RatingDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Config/InitData.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Config/InitData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Controller/RatingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Controller/RatingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/User.Java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/Hotel.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/Hotel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Model/Review.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Repository/RatingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Repository/RatingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Service/RatingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Service/RatingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Service/RatingServiceInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel/src/main/java/tech/titans/hotel/Service/RatingServiceInterface.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +28,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -114,6 +117,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="jdk-17.0.8-graalvm-ce-17-f644763e9732-92fcc01e" />
         <option value="jdk-19.0.2-corretto-19.0.2-f644763e9732-7e92f9a0" />
       </set>
     </attachedChunks>
@@ -133,6 +137,7 @@
       <workItem from="1704131353145" duration="19201000" />
       <workItem from="1704203796727" duration="6833000" />
       <workItem from="1704479444555" duration="116000" />
+      <workItem from="1705340003316" duration="2345000" />
     </task>
     <servers />
   </component>

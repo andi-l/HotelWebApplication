@@ -1,47 +1,38 @@
 package tech.titans.hotel.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import tech.titans.hotel.Model.Rating;
+import org.springframework.web.bind.annotation.*;
+import tech.titans.hotel.Model.Review;
+import tech.titans.hotel.Model.RatingDTO;
 import tech.titans.hotel.Service.RatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import java.util.Optional;
 
 
 @RestController
 @RequestMapping("/api/ratings")
 public class RatingController {
 
-    private final RatingService ratingService;
-
     @Autowired
-    public RatingController(RatingService ratingService) {
-        this.ratingService = ratingService;
-    }
+    public RatingService ratingService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addRating(@RequestBody Rating rating) {
+    public ResponseEntity<?> addRating(@RequestBody RatingDTO ratingDTO, Optional<Review> review) {
+            System.out.println(review);
+            return ResponseEntity.ok("Rating: " + review + " added successfully");
+    }
+
+    @GetMapping("/average")
+    public ResponseEntity<?> getAverage() {
         try {
-            ratingService.addRating(rating);
-            return ResponseEntity.ok("Rating added successfully");
+            double average = ratingService.getAverage();
+            return ResponseEntity.ok("Average rating: " + average + " retrieved successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding rating");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving average rating: " + e.getMessage());
         }
     }
 
-    @PostMapping("/average")
-    public ResponseEntity<String> getAverage() {
-        try {
-            ratingService.getAverage();
-            return ResponseEntity.ok("Average rating retrieved successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving average rating");
-        }
-    }
 
     @PostMapping("/comment")
     public ResponseEntity<String> leaveComment(@RequestParam int starsRating, @RequestParam String comment) {

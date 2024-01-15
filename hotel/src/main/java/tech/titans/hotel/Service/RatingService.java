@@ -1,11 +1,9 @@
 package tech.titans.hotel.Service;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.titans.hotel.Repository.RatingRepository;
-import tech.titans.hotel.Model.Rating;
+import tech.titans.hotel.Model.Review;
 
 @Service
 public class RatingService implements RatingServiceInterface {
@@ -15,38 +13,36 @@ public class RatingService implements RatingServiceInterface {
     public RatingRepository ratingRepository;
 
     @Override
-    public void addRating(Rating rating) {
-        ratingRepository.ratingArrayList.add(rating);
-        System.out.println("Neue Bewertung " + rating.getStars() + " erstellt!");
-        if (rating.getComment() != null && !rating.getComment().isEmpty()) {
-            System.out.println("Kommentar: " + rating.getComment());
+    public void addRating(Review review) {
+        ratingRepository.reviewArrayList.add(review);
+        System.out.println("Neue Bewertung " + review.getStars() + " erstellt!");
+        if (review.getComment() != null && !review.getComment().isEmpty()) {
+            System.out.println("Kommentar: " + review.getComment());
         }
     }
 
 
    // @Override
-    public void getAverage() {
-        if (ratingRepository.ratingArrayList.isEmpty()) {
-            System.out.println("Keine Bewertungen vorhanden.");
-            return;
-        }
+   public double getAverage() {
+       if (ratingRepository.reviewArrayList.isEmpty()) {
+           System.out.println("Keine Bewertungen vorhanden.");
+           return 0;
+       }
 
-        int sum = 0;
-        for (Rating rating : ratingRepository.ratingArrayList) {
-            sum += rating.getStars();
-        }
+       int sum = 0;
+       for (Review review : ratingRepository.reviewArrayList) {
+           sum += review.getStars();
+       }
 
-        double durchschnitt = (double) sum / ratingRepository.ratingArrayList.size();
-        System.out.println("Durchschnittliche Bewertung: " + durchschnitt);
+       return (double) sum / ratingRepository.reviewArrayList.size();
+   }
 
-
-    }
 
     public void leaveComment(int starsRating, String comment) {
-        if (starsRating >= 0 && starsRating < ratingRepository.ratingArrayList.size()) {
-            Rating rating = ratingRepository.ratingArrayList.get(starsRating);
-            System.out.println("Kommentar hinzugefügt zur Bewertung mit " + rating.getStars() + " Sternen: " + comment);
-            rating.setComment(comment);
+        if (starsRating >= 0 && starsRating < ratingRepository.reviewArrayList.size()) {
+            Review review = ratingRepository.reviewArrayList.get(starsRating);
+            System.out.println("Kommentar hinzugefügt zur Bewertung mit " + review.getStars() + " Sternen: " + comment);
+            review.setComment(comment);
         } else {
             System.out.println("Ungültiger Index für die Bewertung.");
         }
