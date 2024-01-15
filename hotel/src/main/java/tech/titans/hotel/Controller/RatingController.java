@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tech.titans.hotel.Model.Rating;
 import tech.titans.hotel.Service.RatingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 
 @RestController
 @RequestMapping("/api/ratings")
@@ -21,22 +24,35 @@ public class RatingController {
     }
 
     @PostMapping("/add")
-    public void addRating(@RequestBody Rating rating) {
-        ratingService.addRating(rating);
+    public ResponseEntity<String> addRating(@RequestBody Rating rating) {
+        try {
+            ratingService.addRating(rating);
+            return ResponseEntity.ok("Rating added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding rating");
+        }
     }
 
     @PostMapping("/average")
-    public void getAverage() {
-        ratingService.getAverage();
+    public ResponseEntity<String> getAverage() {
+        try {
+            ratingService.getAverage();
+            return ResponseEntity.ok("Average rating retrieved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving average rating");
+        }
     }
 
     @PostMapping("/comment")
-    public void leaveComment(@RequestParam int starsRating, @RequestParam String comment) {
-        ratingService.leaveComment(starsRating, comment);
+    public ResponseEntity<String> leaveComment(@RequestParam int starsRating, @RequestParam String comment) {
+        try {
+            ratingService.leaveComment(starsRating, comment);
+            return ResponseEntity.ok("Comment added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding comment");
+        }
     }
 }
-
-
 
 
 
