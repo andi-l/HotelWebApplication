@@ -1,5 +1,7 @@
 package tech.titans.hotel.Model;
 
+import java.util.Date;
+
 public class Booking{
     String type;
     Date bookingDate;

@@ -1,11 +1,13 @@
-package fra.uas.Repository;
+package tech.titans.hotel.Repository;
 
-import fra.uas.Room.Model.Room;
+
 import java.util.ArrayList;
+
 import org.springframework.stereotype.Repository;
+import tech.titans.hotel.Model.User;
 
 @Repository
 public class UserRepository {
 
-  public ArrayList<User> userList = new ArrayList<>();
+    public ArrayList<User> userList = new ArrayList<>();
 }
