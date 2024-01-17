@@ -66,7 +66,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/invoice/{bookingId}")
+    @GetMapping("/booking/{id}/invoice")
     public ResponseEntity<?> generateInvoice(@PathVariable int bookingId) {
         InvoiceDTO invoice = invoiceService.generateInvoice(bookingId);
         if (invoice == null) {
