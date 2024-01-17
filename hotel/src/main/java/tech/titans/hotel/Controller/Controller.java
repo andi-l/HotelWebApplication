@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import tech.titans.hotel.Service.*;
 import tech.titans.hotel.DTO.*;
 import tech.titans.hotel.Model.*;
-
 import java.util.List;
 
 @RestController

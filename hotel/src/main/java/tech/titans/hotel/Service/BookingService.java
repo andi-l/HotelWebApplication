@@ -29,9 +29,6 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
-    
-// ... andere Importe ...
-
     public List<Room> checkAvailability(String checkInDateString, String checkOutDateString, int capacity) {
     try {
 
@@ -84,14 +81,7 @@ public class BookingService {
         return true; // Keine Überschneidungen gefunden, Raum ist verfügbar
     }
 
-    public List<Booking> getAllBookings() {
-        return bookingRepository.bookingList;
-    }
-
-    private Date parseDate(String dateString, int hour) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH");
-        return dateFormat.parse(dateString + " " + hour);
-    }
+    
     
     public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, int capacity) {
         try {
@@ -153,4 +143,12 @@ public void cleanRoom(String roomType) {
     logger.warn("Zimmer mit dem Typ" + roomType + " nicht gefunden für Reinigung.");
 }
 
+public List<Booking> getAllBookings() {
+    return bookingRepository.bookingList;
+}
+
+private Date parseDate(String dateString, int hour) throws ParseException {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH");
+    return dateFormat.parse(dateString + " " + hour);
+}
 }
