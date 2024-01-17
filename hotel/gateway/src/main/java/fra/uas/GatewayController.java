@@ -3,13 +3,13 @@ package fra.uas;
 import fra.uas.model.User;
 import fra.uas.model.UserDTO;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+
+@RestController
+@RequestMapping("/gateway")
 public class GatewayController {
 
 
@@ -19,16 +19,16 @@ public class GatewayController {
         this.restTemplate = restTemplate;
     }
 
-    // This endpoint adds a new user.
+    // This endpoint creates a new user.
     // It takes a User object and sends a POST request to the user service.
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody User user) {
         String url = "http://localhost:9090/users/create";
         HttpEntity<User> request = new HttpEntity<>(user);
         try {
             return restTemplate.postForEntity(url, request, String.class);
         } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Service unavailable");
+            return ResponseEntity.status(e.getStatusCode()).body("Username already exists");
         }
     }
 
