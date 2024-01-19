@@ -22,26 +22,23 @@ public class InvoiceService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    public InvoiceDTO generateInvoice(int bookingId) {
-        Optional<Booking> bookingOptional = findBookingById(bookingId);
-
-        if (!bookingOptional.isPresent()) {
-            logger.info("Buchung nicht gefunden.");
-            return null; // Oder eine geeignete Exception werfen
+    public InvoiceDTO generateInvoice(int bookingId, String username) {
+        Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
+    
+        if (booking == null) {
+            logger.info("Booking not found");
+            return null;
         }
-
-        Booking booking = bookingOptional.get();
+    
+        // Calculate the number of days stayed
         long daysStayed = (booking.getCheckOutDate().getTime() - booking.getCheckInDate().getTime()) / (1000 * 60 * 60 * 24);
+        
+        // Calculate the total cost
         double totalCost = daysStayed * calculatePricePerNight(booking);
-
+    
         return createInvoiceDTO(booking, totalCost);
     }
-
-    private Optional<Booking> findBookingById(int bookingId) {
-        return bookingRepository.bookingList.stream()
-                .filter(booking -> booking.getID() == bookingId)
-                .findFirst();
-    }
+    
 
     private double calculatePricePerNight(Booking booking) {
         for (Hotel hotel : hotelRepository.hotelList) {

@@ -83,7 +83,7 @@ public class BookingService {
 
     
     
-    public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, int capacity) {
+    public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, int capacity, String username) {
         try {
             Date checkInDate = parseDate(checkInDateString, 15);
             Date checkOutDate = parseDate(checkOutDateString, 13);
@@ -93,8 +93,7 @@ public class BookingService {
                 if (room.getType().equals(roomType)) {
                     Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, capacity);
     
-                    // Add the booking to the hotel
-                    bookingRepository.bookingList.add(newBooking);
+                    bookingRepository.addBookingForUser(username, newBooking);
     
                     // Mark room as notClean so its not available
                     room.setClean(false);
@@ -141,10 +140,6 @@ public void cleanRoom(String roomType) {
         }
     }
     logger.warn("Zimmer mit dem Typ" + roomType + " nicht gefunden für Reinigung.");
-}
-
-public List<Booking> getAllBookings() {
-    return bookingRepository.bookingList;
 }
 
 private Date parseDate(String dateString, int hour) throws ParseException {

@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import tech.titans.hotel.Service.*;
 import tech.titans.hotel.DTO.*;
 import tech.titans.hotel.Model.*;
+import tech.titans.hotel.Repository.*;
 import java.util.List;
 
 @RestController
@@ -18,6 +20,9 @@ public class Controller {
 
     @Autowired
     private InvoiceService invoiceService;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @GetMapping(value = "/availability", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> checkAvailability(
@@ -35,14 +40,15 @@ public class Controller {
     }
 
     @PostMapping(value = "/booking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest) {
+    public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest, String username) {
         
         try {
             Booking newBooking = bookingService.createBooking(
                     bookingRequest.getRoomType(), 
                     bookingRequest.getCheckInDate(), 
                     bookingRequest.getCheckOutDate(), 
-                    bookingRequest.getCapacity());
+                    bookingRequest.getCapacity(),
+                    username);
 
             if (newBooking == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
@@ -56,21 +62,34 @@ public class Controller {
 
 
     @GetMapping(value = "/booking", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllBookings() {
-        List<Booking> bookings = bookingService.getAllBookings();
-        if (bookings == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
+    public ResponseEntity<?> getAllBookings(@RequestParam("username") String username) {
+        List<Booking> bookings = bookingRepository.getAllBookingsByUsername(username);
+
+        if (bookings.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No bookings found for user: " + username);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(bookings);
         }
+}
+
+    @GetMapping("/booking//{bookingId}")
+    public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
+        Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
+
+        if (booking == null) {
+            return ResponseEntity.notFound().build(); // Buchung nicht gefunden
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(booking); // Buchung gefunden und zurückgegeben
     }
 
-    @GetMapping("/booking/{id}/invoice")
-    public ResponseEntity<?> generateInvoice(@PathVariable int bookingId) {
-        InvoiceDTO invoice = invoiceService.generateInvoice(bookingId);
-        if (invoice == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buchung nicht gefunden oder Fehler bei der Erstellung der Rechnung.");
+
+        @GetMapping("/booking/{bookingId}/invoice")
+        public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, String username) {
+            InvoiceDTO invoice = invoiceService.generateInvoice(bookingId, username);
+            if (invoice == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buchung nicht gefunden oder Fehler bei der Erstellung der Rechnung.");
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Rechnung" + invoice);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Rechnung" + invoice);
-    }
 }
