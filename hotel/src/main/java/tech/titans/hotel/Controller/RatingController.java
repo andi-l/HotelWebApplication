@@ -18,14 +18,20 @@ public class RatingController {
     public RatingService ratingService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addRating(@RequestBody RatingDTO ratingDTO, Optional<Review> review) {
+    public ResponseEntity<?> addRating(@RequestBody Review review) {
         try {
+            if (review.getStars() == null) {
+                return ResponseEntity.badRequest().body("You have to put a star rating");
+            }
+
             System.out.println(review);
             return ResponseEntity.ok("Rating added successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding rating: " + e.getMessage());
         }
     }
+
+
 
     @GetMapping("/average")
     public ResponseEntity<?> getAverage() {

@@ -1,19 +1,24 @@
 package tech.titans.hotel.Model;
 
-public class Review {
-    int stars;
-    String comment;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public Review(int stars, String comment) {
+public class Review {
+    @JsonProperty(required = true)
+    private Integer stars;
+
+    @JsonProperty(required = false)
+    private String comment;
+
+    public Review(Integer stars, String comment) {
         this.stars = stars;
         this.comment = comment;
     }
 
-    public int getStars() {
+    public Integer getStars() {
         return this.stars;
     }
 
-    public void setStars(int stars) {
+    public void setStars(Integer stars) {
         this.stars = stars;
     }
 
@@ -30,6 +35,4 @@ public class Review {
         return "[" + "stars = " + stars +
                 ", comment ='" + comment + '\'' + "]";
     }
-
 }
-
