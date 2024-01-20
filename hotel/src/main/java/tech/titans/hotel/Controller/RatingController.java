@@ -19,8 +19,12 @@ public class RatingController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addRating(@RequestBody RatingDTO ratingDTO, Optional<Review> review) {
+        try {
             System.out.println(review);
-            return ResponseEntity.ok("Rating: " + review + " added successfully");
+            return ResponseEntity.ok("Rating added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding rating: " + e.getMessage());
+        }
     }
 
     @GetMapping("/average")
