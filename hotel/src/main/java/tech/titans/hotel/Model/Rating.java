@@ -13,7 +13,6 @@ public class Rating{
         this.stars = stars;
     }
 
-
     public int getStars() {
         return this.stars;
     }

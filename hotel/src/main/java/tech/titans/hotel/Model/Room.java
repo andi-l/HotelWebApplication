@@ -5,11 +5,15 @@ public class Room {
   private String type;
   private double pricePerNight;
   private int capacity;
+  private Hotel hotel;
+  private boolean isClean;
 
   public Room(String type, double pricePerNight, int capacity) {
     this.type = type;
     this.pricePerNight = pricePerNight;
     this.capacity = capacity;
+    this.hotel = hotel;
+    this.isClean = true;
   }
 
   public String getType() {
@@ -35,6 +39,14 @@ public class Room {
   public void setCapacity(int capacity) {
     this.capacity = capacity;
   }
+
+  public boolean isClean() {
+    return isClean;
+}
+
+public void setClean(boolean clean) {
+    isClean = clean;
+}
 
   @Override
   public String toString() {
