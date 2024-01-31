@@ -6,14 +6,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
-import tech.titans.hotel.Service.*;
-import tech.titans.hotel.DTO.*;
-import tech.titans.hotel.Model.*;
-import tech.titans.hotel.Repository.*;
+import fra.uas.Service.*;
+import fra.uas.DTO.*;
+import fra.uas.Model.*;
+import fra.uas.Repository.*;
 import java.util.List;
 
 @RestController
-public class Controller {
+public class BookingController {
 
     @Autowired
     private BookingService bookingService;

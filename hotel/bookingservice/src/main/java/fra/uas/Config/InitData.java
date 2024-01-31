@@ -5,10 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
-import tech.titans.hotel.HotelApplication;
-import tech.titans.hotel.Model.Booking;
-import tech.titans.hotel.Model.Hotel;
-import tech.titans.hotel.Model.Room;
+import fra.uas.HotelApplication;
+import fra.uas.Model.Booking;
+import fra.uas.Model.Hotel;
+import fra.uas.Model.Room;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -16,9 +16,9 @@ import java.util.List;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import tech.titans.hotel.Repository.*;
-import tech.titans.hotel.Service.BookingService;
-import tech.titans.hotel.Service.InvoiceService;
+import fra.uas.Repository.*;
+import fra.uas.Service.BookingService;
+import fra.uas.Service.InvoiceService;
 
 @Component
 public class InitData {

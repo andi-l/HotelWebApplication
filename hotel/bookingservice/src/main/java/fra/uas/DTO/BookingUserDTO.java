@@ -1,6 +1,6 @@
 package fra.uas.DTO;
 
-import tech.titans.hotel.Model.*;
+import fra.uas.Model.*;
 
 public class BookingUserDTO {
         private String username;

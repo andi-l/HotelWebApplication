@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import tech.titans.hotel.Model.*;
-import tech.titans.hotel.Repository.*;
+import fra.uas.Model.*;
+import fra.uas.Repository.*;
 
 @Component
 public class BookingService {

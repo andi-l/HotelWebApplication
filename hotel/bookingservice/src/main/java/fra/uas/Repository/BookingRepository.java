@@ -1,6 +1,6 @@
 package fra.uas.Repository;
 
-import tech.titans.hotel.Model.*;
+import fra.uas.Model.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
