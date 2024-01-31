@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fra.uas</groupId>
-    <artifactId>gateway</artifactId>
+    <artifactId>bookingservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gateway</name>
-    <description>gateway</description>
+    <name>bookingservice</name>
+    <description>bookingservice</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -38,19 +38,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>fra.uas</groupId>
-            <artifactId>userservice</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-
-    <dependency>
-        <groupId>fra.uas</groupId>
-        <artifactId>bookingservice</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </dependency>
     </dependencies>
 
     <build>
