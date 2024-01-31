@@ -1,22 +1,16 @@
 package fra.uas.Config;
 
+import fra.uas.Repositories.BookingRepository;
+import fra.uas.Repositories.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-
-import fra.uas.HotelApplication;
-import fra.uas.Model.Booking;
 import fra.uas.Model.Hotel;
 import fra.uas.Model.Room;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.List;
-import java.time.LocalDate;
-import java.time.ZoneId;
 
-import fra.uas.Repository.*;
+import fra.uas.Repositories.*;
 import fra.uas.Service.BookingService;
 import fra.uas.Service.InvoiceService;
 

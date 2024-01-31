@@ -1,4 +1,4 @@
-package fra.uas.Repository;
+package fra.uas.Repositories;
 
 import fra.uas.Model.*;
 import java.util.ArrayList;

@@ -1,15 +1,16 @@
 package fra.uas.Service;
 
+import fra.uas.Repositories.BookingRepository;
+import fra.uas.Repositories.HotelRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import fra.uas.DTO.InvoiceDTO;
-import fra.uas.Repository.*;
+import fra.uas.Repositories.*;
 import fra.uas.Model.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Optional;
 
 @Service
 public class InvoiceService {

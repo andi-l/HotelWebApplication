@@ -7,16 +7,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+
+import fra.uas.Repositories.BookingRepository;
+import fra.uas.Repositories.HotelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import fra.uas.Model.*;
-import fra.uas.Repository.*;
+import fra.uas.Repositories.*;
 
 @Component
 public class BookingService {

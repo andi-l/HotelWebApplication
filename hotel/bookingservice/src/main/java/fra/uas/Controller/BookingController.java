@@ -1,15 +1,15 @@
-package fra.uas.Controller;
+package fra.uas.controller;
 
+import fra.uas.Repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import fra.uas.Service.*;
 import fra.uas.DTO.*;
 import fra.uas.Model.*;
-import fra.uas.Repository.*;
+import fra.uas.Repositories.*;
 import java.util.List;
 
 @RestController
@@ -72,7 +72,7 @@ public class BookingController {
         }
 }
 
-    @GetMapping("/booking//{bookingId}")
+    @GetMapping("/booking/{bookingId}")
     public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
         Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
 
