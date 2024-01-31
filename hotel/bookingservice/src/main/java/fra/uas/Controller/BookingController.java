@@ -40,7 +40,7 @@ public class BookingController {
     }
 
     @PostMapping(value = "/booking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest, String username) {
+    public ResponseEntity<?> createBooking(@RequestBody BookingUserDTO bookingRequest) {
         
         try {
             Booking newBooking = bookingService.createBooking(

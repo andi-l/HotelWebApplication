@@ -108,38 +108,61 @@ public class GatewayController {
         }
     }
 
-    // Neuer Endpunkt im GatewayController für das Erstellen einer Buchung mit Benutzernamen aus dem User Service
-@RequestMapping(value = "/create-booking-with-token", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> createBookingWithToken(@RequestBody BookingDTO bookingRequest, @RequestHeader("Authorization") String authToken) {
-    // Abrufen des Benutzernamens vom User Service
-    String usernameUrl = "http://localhost:9090/get-username";
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", authToken);
-    HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
-    ResponseEntity<String> usernameResponse;
-    try {
-        usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
-    } catch (HttpClientErrorException e) {
-        return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+    @RestController
+    @RequestMapping("/gateway")
+    public class GatewayController {
+    
+        private final RestTemplate restTemplate;
+    
+        public GatewayController(RestTemplate restTemplate) {
+            this.restTemplate = restTemplate;
+        }
+    
+        @PostMapping(value = "/create-booking")
+        public ResponseEntity<?> createBookingThroughGateway(@RequestBody BookingDTO bookingRequest, @RequestHeader("Authorization") String authToken) {
+            // Abrufen des Benutzernamens vom User Service
+            String usernameUrl = "http://localhost:9090/get-username";
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", authToken);
+            HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
+            ResponseEntity<String> usernameResponse;
+            try {
+                usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
+            } catch (HttpClientErrorException e) {
+                return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+            }
+    
+            if (usernameResponse.getStatusCode() != HttpStatus.OK) {
+                return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
+            }
+    
+            String username = usernameResponse.getBody();
+    
+            // Vorbereitung der Anfrage an den Booking Service
+            String bookingUrl = "http://localhost:9091/booking";
+            HttpHeaders bookingHeaders = new HttpHeaders();
+            bookingHeaders.setContentType(MediaType.APPLICATION_JSON);
+    
+            // Fügen Sie den Benutzernamen in die Anfrage ein
+            BookingDTO modifiedBookingRequest = new BookingDTO(
+                bookingRequest.getRoomType(),
+                bookingRequest.getCheckInDate(),
+                bookingRequest.getCheckOutDate(),
+                bookingRequest.getCapacity(),
+                username
+            );
+    
+            HttpEntity<BookingDTO> bookingRequestEntity = new HttpEntity<>(modifiedBookingRequest, bookingHeaders);
+    
+            try {
+                // Senden der Buchungsanfrage an den Booking Service
+                return restTemplate.postForEntity(bookingUrl, bookingRequestEntity, String.class);
+            } catch (HttpClientErrorException e) {
+                return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung: " + e.getStatusText());
+            }
+        }
     }
-
-    if (usernameResponse.getStatusCode() != HttpStatus.OK) {
-        return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
-    }
-
-    String username = usernameResponse.getBody();
-
-    // Erstellen einer Buchung mit dem erhaltenen Benutzernamen
-    String bookingUrl = "http://localhost:9091/booking";
-    BookingDTO bookingDTO = new BookingDTO(bookingRequest, username); // Annahme, dass BookingDTO eine Methode zur Einbeziehung des Benutzernamens hat
-    HttpEntity<BookingDTO> bookingRequestEntity = new HttpEntity<>(bookingDTO);
-
-    try {
-        return restTemplate.postForEntity(bookingUrl, bookingRequestEntity, String.class);
-    } catch (HttpClientErrorException e) {
-        return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung: " + e.getStatusText());
-    }
-}
+    
 
 
 }
