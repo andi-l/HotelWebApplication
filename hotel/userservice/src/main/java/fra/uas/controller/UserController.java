@@ -97,6 +97,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/get-username")
+    public ResponseEntity<?> getUsernameByToken(@RequestHeader("Authorization") String authToken) {
+        String username = tokenService.getUsernameByToken(authToken);
+        if (username != null) {
+            return ResponseEntity.ok(username);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token or user not found");
+        }
+    }
+
+
     // Get list of all Users
     @GetMapping("/list")
     public ResponseEntity<?> getUserList(@RequestHeader("Authorization") String token) {
