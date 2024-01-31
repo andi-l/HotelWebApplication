@@ -1,10 +1,9 @@
-package tech.titans.hotel.Controller;
+package fra.uas.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import tech.titans.hotel.Model.Review;
-import tech.titans.hotel.Model.RatingDTO;
-import tech.titans.hotel.Service.RatingService;
+import fra.uas.model.Review;
+import fra.uas.service.RatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
@@ -44,13 +43,13 @@ public class RatingController {
     }
 
 
-    @PostMapping("/comment")
-    public ResponseEntity<String> leaveComment(@RequestParam int starsRating, @RequestParam String comment) {
-        try {
-            ratingService.leaveComment(starsRating, comment);
-            return ResponseEntity.ok("Comment added successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding comment");
-        }
-    }
+//    @PostMapping("/comment")
+//    public ResponseEntity<String> leaveComment(@RequestParam int starsRating, @RequestParam String comment) {
+//        try {
+//            ratingService.leaveComment(starsRating, comment);
+//            return ResponseEntity.ok("Comment added successfully");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding comment");
+//        }
+//    }
 }

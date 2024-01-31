@@ -1,4 +1,4 @@
-package tech.titans.hotel.Model;
+package fra.uas.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

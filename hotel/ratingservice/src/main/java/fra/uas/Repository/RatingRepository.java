@@ -1,10 +1,10 @@
-package tech.titans.hotel.Repository;
+package fra.uas.repository;
 
 
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
-import tech.titans.hotel.Model.Review;
+import fra.uas.model.Review;
 
 @Repository
 public class RatingRepository {

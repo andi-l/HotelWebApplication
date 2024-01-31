@@ -1,9 +1,9 @@
-package tech.titans.hotel.Service;
+package fra.uas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.titans.hotel.Repository.RatingRepository;
-import tech.titans.hotel.Model.Review;
+import fra.uas.repository.RatingRepository;
+import fra.uas.model.Review;
 
 @Service
 public class RatingService implements RatingServiceInterface {
