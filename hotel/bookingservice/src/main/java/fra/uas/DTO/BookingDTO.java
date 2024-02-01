@@ -6,6 +6,7 @@ public class BookingDTO {
     private String checkInDate;
     private String checkOutDate;
     private int capacity;
+    private String username;
 
     public String getRoomType() {
         return roomType;
@@ -32,5 +33,8 @@ public class BookingDTO {
         this.capacity = capacity;
     }
 
+    public int getUsername() {
+        return username;
+    }
     
 }

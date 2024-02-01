@@ -40,7 +40,7 @@ public class BookingController {
     }
 
     @PostMapping(value = "/booking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBooking(@RequestBody BookingUserDTO bookingRequest) {
+    public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest) {
         
         try {
             Booking newBooking = bookingService.createBooking(
@@ -48,7 +48,7 @@ public class BookingController {
                     bookingRequest.getCheckInDate(), 
                     bookingRequest.getCheckOutDate(), 
                     bookingRequest.getCapacity(),
-                    username);
+                    bookingRequest.getUsername());
 
             if (newBooking == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");

@@ -107,19 +107,9 @@ public class GatewayController {
             return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
         }
     }
-
-    @RestController
-    @RequestMapping("/gateway")
-    public class GatewayController {
-    
-        private final RestTemplate restTemplate;
-    
-        public GatewayController(RestTemplate restTemplate) {
-            this.restTemplate = restTemplate;
-        }
     
         @PostMapping(value = "/create-booking")
-        public ResponseEntity<?> createBookingThroughGateway(@RequestBody BookingDTO bookingRequest, @RequestHeader("Authorization") String authToken) {
+        public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
             // Abrufen des Benutzernamens vom User Service
             String usernameUrl = "http://localhost:9090/get-username";
             HttpHeaders headers = new HttpHeaders();
@@ -138,21 +128,15 @@ public class GatewayController {
     
             String username = usernameResponse.getBody();
     
+            // Add the username to the booking data
+            bookingData.put("username", username);
+    
             // Vorbereitung der Anfrage an den Booking Service
             String bookingUrl = "http://localhost:9091/booking";
             HttpHeaders bookingHeaders = new HttpHeaders();
             bookingHeaders.setContentType(MediaType.APPLICATION_JSON);
     
-            // Fügen Sie den Benutzernamen in die Anfrage ein
-            BookingDTO modifiedBookingRequest = new BookingDTO(
-                bookingRequest.getRoomType(),
-                bookingRequest.getCheckInDate(),
-                bookingRequest.getCheckOutDate(),
-                bookingRequest.getCapacity(),
-                username
-            );
-    
-            HttpEntity<BookingDTO> bookingRequestEntity = new HttpEntity<>(modifiedBookingRequest, bookingHeaders);
+            HttpEntity<Map<String, Object>> bookingRequestEntity = new HttpEntity<>(bookingData, bookingHeaders);
     
             try {
                 // Senden der Buchungsanfrage an den Booking Service
@@ -162,7 +146,3 @@ public class GatewayController {
             }
         }
     }
-    
-
-
-}
