@@ -3,11 +3,9 @@ package tech.titans.hotel.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tech.titans.hotel.Model.Review;
-import tech.titans.hotel.Model.RatingDTO;
 import tech.titans.hotel.Service.RatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import java.util.Optional;
 
 
 @RestController
@@ -53,8 +51,22 @@ public class RatingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding comment");
         }
     }
-}
+    @DeleteMapping("/comment/{reviewId}")
+    public ResponseEntity<String> deleteComment(@PathVariable int reviewId) {
+        try {
+            boolean deleted = ratingService.deleteComment(reviewId);
+            
+            if (deleted) {
+                return ResponseEntity.ok("Comment deleted successfully");
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting comment");
+        }
 
+}
+}
 
 
 

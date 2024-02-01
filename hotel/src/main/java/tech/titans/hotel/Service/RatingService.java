@@ -47,6 +47,24 @@ public class RatingService implements RatingServiceInterface {
             System.out.println("Ungültiger Index für die Bewertung.");
         }
     }
+   
+    public boolean deleteComment(int reviewId) {
+        if (reviewId >= 0 && reviewId < ratingRepository.reviewArrayList.size()) {
+            Review review = ratingRepository.reviewArrayList.get(reviewId);
+            
+            if (review.getComment() != null && !review.getComment().isEmpty()) {
+                review.setComment(null); // Remove the comment
+                System.out.println("Comment deleted for the review with " + review.getStars() + " stars");
+                return true;
+            } else {
+                System.out.println("No comment found for the review with " + review.getStars() + " stars");
+                return false;
+            }
+        } else {
+            System.out.println("Invalid review index for deleting the comment");
+            return false;
+        }
+}
 }
 
 
