@@ -111,8 +111,6 @@ public class GatewayController {
     }
     
 
-
-
         @PostMapping(value = "/create-booking")
         public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
             // Abrufen des Benutzernamens vom User Service
@@ -151,25 +149,37 @@ public class GatewayController {
             }
         }
     
-        @GetMapping("/booking/{bookingId}")
-        public ResponseEntity<?> getBookingByIdThroughGateway(@PathVariable int bookingId, @RequestHeader("Authorization") String authToken) {
-            // URL des Buchungsservices, wo die Buchungsinformationen abgerufen werden
-            String bookingServiceUrl = "http://localhost:9091/booking/" + bookingId;
-        
-            // Vorbereitung der Header für die Weiterleitung der Authentifizierung
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", authToken);
-            HttpEntity<?> entity = new HttpEntity<>(headers);
-        
-            try {
-                // Weiterleitung der Anfrage an den Buchungsservice
-                ResponseEntity<String> response = restTemplate.exchange(bookingServiceUrl, HttpMethod.GET, entity, String.class);
-                return ResponseEntity.ok().body(response.getBody());
-            } catch (HttpClientErrorException e) {
-                // Behandlung von Fehlern, z.B. wenn die Buchung nicht gefunden wird oder bei Authentifizierungsproblemen
-                return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen der Buchung: " + e.getStatusText());
-            }
-        }
-        
+ @GetMapping("/booking/{bookingId}")
+public ResponseEntity<?> getBookingByUsernameAndIdThroughGateway(@RequestHeader("Authorization") String authToken, @PathVariable int bookingId) {
+    // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
+    String usernameUrl = "http://localhost:9090/users/get-username";
+    HttpHeaders headers = new HttpHeaders();
+    headers.set("Authorization", authToken);
+    HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
+    ResponseEntity<String> usernameResponse;
+    try {
+        usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
+    } catch (HttpClientErrorException e) {
+        return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+    }
+    
+    if (usernameResponse.getStatusCode() != HttpStatus.OK) {
+        return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
+    }
+    
+    String username = usernameResponse.getBody();
+    
+    // Weiterleiten der Anfrage an den Booking-Service mit dem extrahierten Benutzernamen und der Buchungs-ID
+    String bookingUrl = "http://localhost:9091/booking/" + username + "/" + bookingId;
+    try {
+        // Hier könnte zusätzlich eine HttpEntity mit weiteren notwendigen Headers konfiguriert werden, falls nötig
+        ResponseEntity<?> bookingResponse = restTemplate.getForEntity(bookingUrl, String.class);
+        return bookingResponse;
+    } catch (HttpClientErrorException e) {
+        return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen der Buchung: " + e.getStatusText());
+    }
+}
+
+
     
     }
