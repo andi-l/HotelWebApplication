@@ -192,7 +192,7 @@ public class GatewayController {
         String username = usernameResponse.getBody();
 
         // Anfrage an den Booking Service senden, um alle Buchungen für den Benutzer abzurufen
-        String bookingUrl = "http://localhost:9091/booking?username=" + username;
+        String bookingUrl = "http://localhost:9091/booking/" + username;
         try {
             ResponseEntity<String> bookingResponse = restTemplate.exchange(bookingUrl, HttpMethod.GET, null, String.class);
             return bookingResponse;
