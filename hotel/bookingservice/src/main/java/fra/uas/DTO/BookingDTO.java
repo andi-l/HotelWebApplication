@@ -33,7 +33,7 @@ public class BookingDTO {
         this.capacity = capacity;
     }
 
-    public int getUsername() {
+    public String getUsername() {
         return username;
     }
     
