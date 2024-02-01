@@ -145,7 +145,7 @@ public class GatewayController {
                 // Senden der Buchungsanfrage an den Booking Service
                 return restTemplate.postForEntity(bookingUrl, bookingRequestEntity, String.class);
             } catch (HttpClientErrorException e) {
-                return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung: " + e.getStatusText());
+                return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung. Passen Sie bitte die Daten an." + e.getStatusText());
             }
         }
     
