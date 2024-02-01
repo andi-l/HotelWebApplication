@@ -110,6 +110,9 @@ public class GatewayController {
         }
     }
     
+
+
+
         @PostMapping(value = "/create-booking")
         public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
             // Abrufen des Benutzernamens vom User Service
@@ -147,4 +150,26 @@ public class GatewayController {
                 return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung. Passen Sie bitte die Daten an." + e.getStatusText());
             }
         }
+    
+        @GetMapping("/booking/{bookingId}")
+        public ResponseEntity<?> getBookingByIdThroughGateway(@PathVariable int bookingId, @RequestHeader("Authorization") String authToken) {
+            // URL des Buchungsservices, wo die Buchungsinformationen abgerufen werden
+            String bookingServiceUrl = "http://localhost:9091/booking/" + bookingId;
+        
+            // Vorbereitung der Header für die Weiterleitung der Authentifizierung
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", authToken);
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+        
+            try {
+                // Weiterleitung der Anfrage an den Buchungsservice
+                ResponseEntity<String> response = restTemplate.exchange(bookingServiceUrl, HttpMethod.GET, entity, String.class);
+                return ResponseEntity.ok().body(response.getBody());
+            } catch (HttpClientErrorException e) {
+                // Behandlung von Fehlern, z.B. wenn die Buchung nicht gefunden wird oder bei Authentifizierungsproblemen
+                return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen der Buchung: " + e.getStatusText());
+            }
+        }
+        
+    
     }
