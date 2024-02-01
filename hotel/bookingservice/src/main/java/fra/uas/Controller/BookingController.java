@@ -1,4 +1,4 @@
-package fra.uas.controller;
+package fra.uas.Controller;
 
 import fra.uas.Repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +61,8 @@ public class BookingController {
     }
 
 
-    @GetMapping(value = "/booking", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllBookings(@RequestParam("username") String username) {
+    @GetMapping(value = "/booking/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllBookings(@PathVariable String username) {
         List<Booking> bookings = bookingRepository.getAllBookingsByUsername(username);
 
         if (bookings.isEmpty()) {
