@@ -92,7 +92,7 @@ public class BookingService {
     
             List<Room> availableRooms = checkAvailability(checkInDateString, checkOutDateString, capacity);
             for (Room room : availableRooms) {
-                if (room.getType().equals(roomType)) {
+                if (room.getType().equals(roomType) && room.isClean()) {
                     Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, capacity);
     
                     bookingRepository.addBookingForUser(username, newBooking);

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/gateway")
@@ -114,7 +116,7 @@ public class GatewayController {
         @PostMapping(value = "/create-booking")
         public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
             // Abrufen des Benutzernamens vom User Service
-            String usernameUrl = "http://localhost:9090/get-username";
+            String usernameUrl = "http://localhost:9090/users/get-username";
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", authToken);
             HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
