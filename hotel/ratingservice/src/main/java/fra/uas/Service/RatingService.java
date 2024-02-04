@@ -1,9 +1,11 @@
-package fra.uas.service;
+package fra.uas.Service;
 
+import fra.uas.service.RatingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import fra.uas.repository.RatingRepository;
-import fra.uas.model.Review;
+import fra.uas.Repository.RatingRepository;
+import fra.uas.Model.Review;
+
 
 @Service
 public class RatingService implements RatingServiceInterface {

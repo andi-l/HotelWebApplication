@@ -1,9 +1,9 @@
-package fra.uas.controller;
+package fra.uas.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import fra.uas.model.Review;
-import fra.uas.service.RatingService;
+import fra.uas.Model.Review;
+import fra.uas.Service.RatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
@@ -41,6 +41,7 @@ public class RatingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving average rating: " + e.getMessage());
         }
     }
+
 
 
 //    @PostMapping("/comment")

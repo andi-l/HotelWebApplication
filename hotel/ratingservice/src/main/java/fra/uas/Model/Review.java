@@ -1,4 +1,4 @@
-package fra.uas.model;
+package fra.uas.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
