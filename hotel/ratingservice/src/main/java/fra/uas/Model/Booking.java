@@ -66,8 +66,18 @@ public class Booking {
 
     }
 
-    public int getID(){
-        return this.id;
+//    public static int getID(){
+//
+//        return this.id;
+//    }
+
+
+    public static int getCounter() {
+        return counter;
+    }
+
+    public static void setCounter(int counter) {
+        Booking.counter = counter;
     }
 
     @Override

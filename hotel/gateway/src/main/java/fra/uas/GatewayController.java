@@ -8,6 +8,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+//import fra.uas.model.Review;
+//import fra.uas.Model.RatingDTO;
+
 import java.util.Map;
 
 
@@ -232,6 +235,13 @@ public class GatewayController {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Verfügbarkeitsprüfung: " + e.getStatusText());
         }
     }
+
+
+
+
+
+
+
 
 
 }
