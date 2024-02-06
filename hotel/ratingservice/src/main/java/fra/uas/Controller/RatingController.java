@@ -42,15 +42,19 @@ public class RatingController {
         }
     }
 
+    @DeleteMapping("/{reviewId}")
+public ResponseEntity<?> deleteRating(@PathVariable Long reviewId) {
+    try {
+        Optional<Review> existingReview = ratingService.getReviewById(reviewId);
+        if (existingReview.isPresent()) {
+            ratingService.deleteReview(reviewId);
+            return ResponseEntity.ok("Rating with ID " + reviewId + " deleted successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting rating: " + e.getMessage());
+    }
+}
 
-
-//    @PostMapping("/comment")
-//    public ResponseEntity<String> leaveComment(@RequestParam int starsRating, @RequestParam String comment) {
-//        try {
-//            ratingService.leaveComment(starsRating, comment);
-//            return ResponseEntity.ok("Comment added successfully");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding comment");
-//        }
-//    }
 }

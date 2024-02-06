@@ -18,13 +18,4 @@ public class RatingRepository {
     public HashMap<Integer, Review> reviewHashMap = new HashMap<Integer, Review>();
 
 
-
-
-//        public void addReviewId(Review review) {
-//        int reviewId = Booking.getID();
-//
-//        reviewHashMap.put(reviewId, review);
-//       }
-
-
 }
