@@ -1,4 +1,4 @@
-package fra.uas.Model;
+package fra.uas.model;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package fra.uas.Controller;
+package fra.uas.controller;
 
 import fra.uas.Repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;

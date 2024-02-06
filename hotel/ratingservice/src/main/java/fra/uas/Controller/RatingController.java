@@ -1,9 +1,9 @@
-package fra.uas.Controller;
+package fra.uas.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import fra.uas.Model.Review;
-import fra.uas.Service.RatingService;
+import fra.uas.model.Review;
+import fra.uas.service.RatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;

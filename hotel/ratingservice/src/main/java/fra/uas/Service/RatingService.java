@@ -1,11 +1,11 @@
-package fra.uas.Service;
+package fra.uas.service;
 
-import fra.uas.Model.Booking;
+import fra.uas.model.Booking;
 import fra.uas.service.RatingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import fra.uas.Repository.RatingRepository;
-import fra.uas.Model.Review;
+import fra.uas.repository.RatingRepository;
+import fra.uas.model.Review;
 
 import java.util.ArrayList;
 import java.util.HashMap;

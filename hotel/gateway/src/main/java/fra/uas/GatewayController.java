@@ -8,8 +8,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-//import fra.uas.model.Review;
-//import fra.uas.Model.RatingDTO;
+import fra.uas.model.Review;
+import fra.uas.model.RatingDTO;
 
 import java.util.Map;
 
@@ -266,11 +266,84 @@ public class GatewayController {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Generieren der Rechnung: " + e.getStatusText());
         }
     }
-    
+    @PostMapping("/add-rating")
+    public ResponseEntity<?> addRatingThroughGateway(@RequestBody Review review, @RequestHeader("Authorization") String authToken) {
+        // Überprüfen, ob ein gültiges Authentifizierungstoken vorhanden ist
+//        if (authToken == null || authToken.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Authentication token is required");
+//        }
+
+        // Abrufen des Benutzernamens vom User Service
+        String usernameUrl = "http://localhost:9090/users/get-username";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authToken);
+        HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> usernameResponse;
+        try {
+            usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+        }
+
+        if (usernameResponse.getStatusCode() != HttpStatus.OK) {
+            return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
+        }
+
+        String username = usernameResponse.getBody();
 
 
 
+        // Vorbereitung der Anfrage an das Rating-Service
+        String ratingUrl = "http://localhost:9092/api/ratings/add";
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Review> requestEntity = new HttpEntity<>(review, headers);
 
+        try {
+            // Senden der Bewertungsanfrage an das Rating-Service
+            return restTemplate.postForEntity(ratingUrl, requestEntity, String.class);
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Hinzufügen der Bewertung: " + e.getStatusText());
+        }
+    }
+
+    @GetMapping("/average-rating")
+    public ResponseEntity<?> getAverageRatingThroughGateway(@RequestHeader("Authorization") String authToken) {
+        // Überprüfen, ob ein gültiges Authentifizierungstoken vorhanden ist
+//        if (authToken == null || authToken.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Authentication token is required");
+//        }
+
+        // Abrufen des Benutzernamens vom User Service
+        String usernameUrl = "http://localhost:9090/users/get-username";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authToken);
+        HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> usernameResponse;
+        try {
+            usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+        }
+
+        if (usernameResponse.getStatusCode() != HttpStatus.OK) {
+            return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
+        }
+
+        String username = usernameResponse.getBody();
+
+        // Vorbereitung der Anfrage an das Rating-Service
+        String averageRatingUrl = "http://localhost:9092/api/ratings/average";
+        HttpHeaders averageRatingHeaders = new HttpHeaders();
+        averageRatingHeaders.set("Authorization", authToken);
+        HttpEntity<?> averageRatingRequest = new HttpEntity<>(averageRatingHeaders);
+
+        try {
+            // Senden der Anfrage für die durchschnittliche Bewertung an das Rating-Service
+            return restTemplate.exchange(averageRatingUrl, HttpMethod.GET, averageRatingRequest, String.class);
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen der durchschnittlichen Bewertung: " + e.getStatusText());
+        }
+    }
 
 
 }

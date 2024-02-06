@@ -1,12 +1,12 @@
-package fra.uas.Repository;
+package fra.uas.repository;
 
 
 import java.util.ArrayList;
 
-import fra.uas.Model.Booking;
+import fra.uas.model.Booking;
 
 import org.springframework.stereotype.Repository;
-import fra.uas.Model.Review;
+import fra.uas.model.Review;
 import java.util.HashMap;
 
 

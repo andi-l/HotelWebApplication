@@ -54,6 +54,12 @@
         <artifactId>bookingservice</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </dependency>
+        <dependency>
+            <groupId>fra.uas</groupId>
+            <artifactId>ratingservice</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
