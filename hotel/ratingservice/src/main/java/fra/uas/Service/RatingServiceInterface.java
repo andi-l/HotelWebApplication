@@ -1,6 +1,6 @@
 package fra.uas.service;
 
-import fra.uas.model.Review;
+import fra.uas.Model.Review;
 
 public interface RatingServiceInterface {
 

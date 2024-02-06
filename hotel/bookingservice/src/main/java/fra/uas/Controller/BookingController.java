@@ -72,17 +72,16 @@ public class BookingController {
         }
 }
 
-    @GetMapping("/booking/{bookingId}")
-    public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
-        Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
+@GetMapping("/booking/{username}/{bookingId}")
+public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
+    Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
 
-        if (booking == null) {
-            return ResponseEntity.notFound().build(); // Buchung nicht gefunden
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(booking); // Buchung gefunden und zurückgegeben
+    if (booking == null) {
+        return ResponseEntity.notFound().build(); // Buchung nicht gefunden
     }
 
+    return ResponseEntity.status(HttpStatus.OK).body(booking); // Buchung gefunden und zurückgegeben
+}
 
         @GetMapping("/booking/{bookingId}/invoice")
         public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, String username) {
@@ -92,4 +91,6 @@ public class BookingController {
             }
             return ResponseEntity.status(HttpStatus.OK).body("Rechnung" + invoice);
         }
-}
+
+
+    }
