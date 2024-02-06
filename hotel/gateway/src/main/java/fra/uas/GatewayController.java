@@ -237,7 +237,36 @@ public class GatewayController {
     }
 
 
-
+    @GetMapping("/booking/{bookingId}/invoice")
+    public ResponseEntity<?> generateInvoiceThroughGateway(@RequestHeader("Authorization") String authToken, @PathVariable int bookingId) {
+        // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
+        String usernameUrl = "http://localhost:9090/users/get-username";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authToken);
+        HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> usernameResponse;
+        try {
+            usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+        }
+    
+        if (usernameResponse.getStatusCode() != HttpStatus.OK) {
+            return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
+        }
+    
+        String username = usernameResponse.getBody();
+    
+        // Weiterleiten der Anfrage an den Invoice-Service mit dem extrahierten Benutzernamen und der Buchungs-ID
+        String invoiceUrl = "http://localhost:9092/invoice/generate/" + bookingId + "?username=" + username;
+        try {
+            ResponseEntity<?> invoiceResponse = restTemplate.getForEntity(invoiceUrl, String.class);
+            return invoiceResponse;
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Generieren der Rechnung: " + e.getStatusText());
+        }
+    }
+    
 
 
 
