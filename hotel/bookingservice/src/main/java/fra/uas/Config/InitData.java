@@ -54,35 +54,16 @@ public class InitData {
         Room room5 = new Room("Standard", 100.0, 1);
         hotel1.getRooms().add(room5);
 
+        Room room6 = new Room("Standard", 100.0, 1);
+        hotel1.getRooms().add(room6);
+
+        Room room7 = new Room("Standard", 100.0, 1);
+        hotel1.getRooms().add(room7);
+
+        Room room8 = new Room("Standard", 100.0, 1);
+        hotel1.getRooms().add(room8);
+
         // Add Hotel 1 to the repository
         hotelRepository.addHotel(hotel1);
-
-        // Print the hotel entries
-        // System.out.println(hotelRepository.hotelList.get(0));
-
-        // Verwenden des BookingService, um eine Buchung zu erstellen
-        // List<Room> testRooms = bookingService.checkAvailability("2024-01-10",
-        // "2024-01-15", 2);
-        // System.out.println(testRooms);
-
-        // Booking booking = bookingService.createBooking("Standard Double", "2024-01-03", "2024-01-10", 2);
-        // if (booking != null) {
-        //     hotel1.addBooking(booking);
-        //     invoiceService = new InvoiceService(bookingRepository, hotelRepository);
-
-        //     // Erzeugen Sie eine Rechnung für die erstellte Buchung
-        //     invoiceService.generateInvoice(booking.getID());
-        // } else {
-        //     System.out.println("Buchung konnte nicht erstellt werden.");
-        // }
-
-        // bookingService.cleanRooms();
-
-        // Booking booking2 = bookingService.createBooking("Standard Double",
-        // "2024-01-15", "2024-01-20", 2);
-        // if (booking2 == null) {
-        // System.out.println("Buchung konnte nicht erstellt werden.");
-        // }
-        // }
     }
 }

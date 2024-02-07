@@ -1,6 +1,6 @@
-package fra.uas.model;
+package fra.uas.Model;
 
-import fra.uas.model.Review;
+import fra.uas.Model.*;
 
 import java.util.ArrayList;
 import java.util.List;

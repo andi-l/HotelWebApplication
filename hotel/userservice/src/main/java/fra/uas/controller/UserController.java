@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -23,7 +22,7 @@ public class UserController {
     public TokenServiceInterface tokenService;
 
     // Create a new User
-    @PostMapping("/create")
+    @PostMapping("/user")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         if (userService.usernameExists(user.getUsername())) {
             return ResponseEntity.badRequest().body("Username already exists");
@@ -58,7 +57,7 @@ public class UserController {
 
 
     // Delete a User
-    @DeleteMapping("/delete")
+    @DeleteMapping("/user")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
         String username = tokenService.getUsernameByToken(token);
         boolean result = userService.deleteUser(username);
@@ -70,7 +69,7 @@ public class UserController {
     }
 
     // Change Password
-    @PutMapping("/change-password")
+    @PutMapping("/password")
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String token,
                                             @RequestBody UserDTO newPasswordDTO) {
         String username = tokenService.getUsernameByToken(token);
@@ -83,7 +82,7 @@ public class UserController {
     }
 
     // Change Username
-    @PutMapping("/change-username")
+    @PutMapping("/username")
     public ResponseEntity<?> changeUsername(@RequestHeader("Authorization") String token,
                                             @RequestBody UserDTO newUsernameDTO) {
         String oldUsername = tokenService.getUsernameByToken(token);
@@ -97,7 +96,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get-username")
+    @GetMapping("/username")
     public ResponseEntity<?> getUsernameByToken(@RequestHeader("Authorization") String authToken) {
         String username = tokenService.getUsernameByToken(authToken);
         if (username != null) {

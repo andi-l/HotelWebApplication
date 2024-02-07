@@ -1,27 +1,28 @@
-package fra.uas.model;
+package fra.uas.Model;
 
 public class RatingDTO {
 
-    private String comment;
-    private int stars;
-    private int bookingId;
+    private Booking booking;
+    private Review review;
 
-
-
-    public String getComment() {
-        return comment;
+    public RatingDTO(Booking booking, Review review) {
+        this.booking = booking;
+        this.review = review;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public Review getReview() {
+        return review;
     }
 
-    public int getStars() {
-        return stars;
+    public void setReview(Review review) {
+        this.review = review;
     }
 
-    public void setStars() {
-        this.stars = stars;
+    public Booking getBooking() {
+        return booking;
+    }
+    public void setBooking() {
+        this.booking = booking;
     }
 
 }

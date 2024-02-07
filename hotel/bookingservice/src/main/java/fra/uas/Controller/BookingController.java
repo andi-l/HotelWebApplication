@@ -83,14 +83,14 @@ public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username
     return ResponseEntity.status(HttpStatus.OK).body(booking); // Buchung gefunden und zurückgegeben
 }
 
-        @GetMapping("/booking/{bookingId}/invoice")
-        public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, String username) {
-            InvoiceDTO invoice = invoiceService.generateInvoice(bookingId, username);
-            if (invoice == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buchung nicht gefunden oder Fehler bei der Erstellung der Rechnung.");
-            }
-            return ResponseEntity.status(HttpStatus.OK).body("Rechnung" + invoice);
+    @GetMapping("/booking/{bookingId}/invoice")
+    public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, @RequestParam("username") String username) {
+        InvoiceDTO invoice = invoiceService.generateInvoice(bookingId, username);
+        if (invoice == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buchung nicht gefunden oder Fehler bei der Erstellung der Rechnung.");
         }
+        return ResponseEntity.ok(invoice);
+    }
 
 
     }

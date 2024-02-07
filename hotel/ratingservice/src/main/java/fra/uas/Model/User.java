@@ -1,4 +1,4 @@
-package fra.uas.model;
+package fra.uas.Model;
 
 public class User {
 

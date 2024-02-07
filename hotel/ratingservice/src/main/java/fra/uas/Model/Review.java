@@ -1,4 +1,4 @@
-package fra.uas.model;
+package fra.uas.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,6 +12,9 @@ public class Review {
     public Review(Integer stars, String comment) {
         this.stars = stars;
         this.comment = comment;
+    }
+
+    public Review() {
     }
 
     public Integer getStars() {

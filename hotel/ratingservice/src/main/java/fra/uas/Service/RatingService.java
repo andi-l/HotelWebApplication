@@ -1,114 +1,69 @@
-package fra.uas.service;
+package fra.uas.Service;
 
-import fra.uas.model.Booking;
-import fra.uas.service.RatingServiceInterface;
+import fra.uas.Model.*;
+import fra.uas.Service.RatingServiceInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import fra.uas.repository.RatingRepository;
-import fra.uas.model.Review;
+import fra.uas.Repository.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 
 @Service
 public class RatingService implements RatingServiceInterface {
 
+    private static final Logger logger = LoggerFactory.getLogger(RatingService.class);
 
     @Autowired
     public RatingRepository ratingRepository;
 
-//    @Override
-//    public void addRating(Review review) {
-//        ratingRepository.reviewArrayList.add(review);
-//        System.out.println("Neue Bewertung " + review.getStars() + " erstellt!");
-//        if (review.getComment() != null && !review.getComment().isEmpty()) {
-//            System.out.println("Kommentar: " + review.getComment());
-//        }
-//    }
-
-
     //Neu mit HashMap
     @Override
-    public void addRating(Review review) {
-        int ReviewId = Booking.getCounter();
-        ratingRepository.reviewHashMap.put(ReviewId, review);
-        System.out.println("Neue Bewertung " + review.getStars() + " erstellt!");
-        if (review.getComment() != null && !review.getComment().isEmpty()) {
-            System.out.println("Kommentar: " + review.getComment());
+    public void addRating(Booking booking, Review review) {
+        // Überprüfen, ob die Booking- und Review-Objekte nicht null sind
+        if (booking == null || review == null) {
+            logger.warn("Review oder Booking ist null, kann nicht zum Repository hinzugefügt werden.");
+            return;
+        }
+        else {
+        ratingRepository.addReview(booking, review);
+        logger.info("Review erfolgreich für Booking hinzugefügt: " + booking.toString());
         }
     }
 
-
-
-    // Alt
-   // @Override
-//   public double getAverage() {
-//       if (ratingRepository.reviewArrayList.isEmpty()) {
-//           System.out.println("Keine Bewertungen vorhanden.");
-//           return 0;
-//       }
-//
-//       int sum = 0;
-//       for (Review review : ratingRepository.reviewArrayList) {
-//           sum += review.getStars();
-//       }
-//
-//       return (double) sum / ratingRepository.reviewArrayList.size();
-//   }
-
-    //Neu mit Hashmap
+    public Collection<Review> getAllRatings() {
+        return ratingRepository.getAllReviews();
+    }
 
     public double getAverage() {
+        // Prüfen, ob Bewertungen vorhanden sind
         if (ratingRepository.reviewHashMap.isEmpty()) {
-            System.out.println("Keine Bewertungen vorhanden.");
-            return 0;
+            logger.warn("Keine Bewertungen vorhanden.");
+            return 0.0; // Rückgabe 0, wenn keine Bewertungen vorhanden sind
         }
 
-        int sum = 0;
-        ArrayList<Integer> allStars = new ArrayList<>();
+        int sum = 0; // Summe der Sternebewertungen
+        int count = 0; // Anzahl der Bewertungen
+
+        // Iterieren über alle Bewertungen im Repository
         for (Review review : ratingRepository.reviewHashMap.values()) {
-            int stars = review.getStars();
-            allStars.add(stars);
-
-            sum += stars;
+            if (review != null && review.getStars() != null) { // Sicherstellen, dass review und stars nicht null sind
+                sum += review.getStars(); // Hinzufügen der Sterne zur Summe
+                count++; // Erhöhen des Zählers
+            }
         }
 
-        return (double) sum / allStars.size();
+        if (count == 0) {
+            logger.warn("Keine gültigen Bewertungen vorhanden.");
+            return 0.0; // Rückgabe 0, wenn keine gültigen Bewertungen vorhanden sind
+        }
+
+        // Berechnung des Durchschnitts und Rückgabe
+        return (double) sum / count;
     }
 
-
-
-
-
-
-
-
-
-
-//    public void addReviewId(Review review) {
-//        int reviewId = Booking.getID();
-//
-//        reviewHashMap.put(reviewId, review);
-//    }
-
-
-
-
-
-
-
-
-   // Kann wahrscheinlich weg
-
-
-//    public void leaveComment(int starsRating, String comment) {
-//        if (starsRating >= 0 && starsRating < ratingRepository.reviewArrayList.size()) {
-//            Review review = ratingRepository.reviewArrayList.get(starsRating);
-//            System.out.println("Kommentar hinzugefügt zur Bewertung mit " + review.getStars() + " Sternen: " + comment);
-//            review.setComment(comment);
-//        } else {
-//            System.out.println("Ungültiger Index für die Bewertung.");
-//        }
-//    }
 }

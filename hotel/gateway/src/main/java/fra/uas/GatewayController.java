@@ -8,9 +8,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import fra.uas.model.Review;
-import fra.uas.model.RatingDTO;
+import fra.uas.Model.Review;
+import fra.uas.Model.RatingDTO;
+import fra.uas.Model.Booking;
 
+import java.util.Collection;
 import java.util.Map;
 
 
@@ -27,9 +29,9 @@ public class GatewayController {
 
     // This endpoint creates a new user.
     // It takes a User object and sends a POST request to the user service.
-    @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        String url = "http://localhost:9090/users/create";
+        String url = "http://localhost:9090/user";
         HttpEntity<User> request = new HttpEntity<>(user);
         try {
             return restTemplate.postForEntity(url, request, String.class);
@@ -40,7 +42,7 @@ public class GatewayController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loginUser(@RequestBody UserDTO user) {
-        String url = "http://localhost:9090/users/login";
+        String url = "http://localhost:9090/login";
         HttpEntity<UserDTO> request = new HttpEntity<>(user);
         try {
             return restTemplate.postForEntity(url, request, String.class);
@@ -51,7 +53,7 @@ public class GatewayController {
 
     @RequestMapping(value = "/protected", method = RequestMethod.GET)
     public ResponseEntity<?> protectedEndpoint(@RequestHeader("Authorization") String authToken) {
-        String url = "http://localhost:9090/users/protected";
+        String url = "http://localhost:9090/protected";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> request = new HttpEntity<>(headers);
@@ -62,9 +64,9 @@ public class GatewayController {
         }
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
-        String url = "http://localhost:9090/users/delete";
+        String url = "http://localhost:9090/user";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
         HttpEntity<?> request = new HttpEntity<>(headers);
@@ -75,9 +77,9 @@ public class GatewayController {
         }
     }
 
-    @RequestMapping(value = "/change-password", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/password", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String token, @RequestBody UserDTO newPasswordDTO) {
-        String url = "http://localhost:9090/users/change-password";
+        String url = "http://localhost:9090/password";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
         HttpEntity<UserDTO> request = new HttpEntity<>(newPasswordDTO, headers);
@@ -88,9 +90,9 @@ public class GatewayController {
         }
     }
 
-    @RequestMapping(value = "/change-username", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/username", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeUsername(@RequestHeader("Authorization") String token, @RequestBody UserDTO newUsernameDTO) {
-        String url = "http://localhost:9090/users/change-username";
+        String url = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
         HttpEntity<UserDTO> request = new HttpEntity<>(newUsernameDTO, headers);
@@ -103,7 +105,7 @@ public class GatewayController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<?> getUserList(@RequestHeader("Authorization") String token) {
-        String url = "http://localhost:9090/users/list";
+        String url = "http://localhost:9090/list";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
         HttpEntity<?> request = new HttpEntity<>(headers);
@@ -115,10 +117,10 @@ public class GatewayController {
     }
 
 
-    @PostMapping(value = "/create-booking")
+    @PostMapping(value = "/booking")
     public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
         // Abrufen des Benutzernamens vom User Service
-        String usernameUrl = "http://localhost:9090/users/get-username";
+        String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
@@ -156,7 +158,7 @@ public class GatewayController {
     @GetMapping("/booking/{bookingId}")
     public ResponseEntity<?> getBookingByUsernameAndIdThroughGateway(@RequestHeader("Authorization") String authToken, @PathVariable int bookingId) {
         // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
-        String usernameUrl = "http://localhost:9090/users/get-username";
+        String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
@@ -187,7 +189,7 @@ public class GatewayController {
     @GetMapping(value = "/booking")
     public ResponseEntity<?> getAllBookingsThroughGateway(@RequestHeader("Authorization") String authToken) {
         // Abrufen des Benutzernamens vom User Service
-        String usernameUrl = "http://localhost:9090/users/get-username";
+        String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
@@ -237,10 +239,10 @@ public class GatewayController {
     }
 
 
-    @GetMapping("/booking/{bookingId}/invoice")
+    @GetMapping("/booking/invoice/{bookingId}")
     public ResponseEntity<?> generateInvoiceThroughGateway(@RequestHeader("Authorization") String authToken, @PathVariable int bookingId) {
         // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
-        String usernameUrl = "http://localhost:9090/users/get-username";
+        String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
@@ -250,35 +252,32 @@ public class GatewayController {
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
         }
-    
+
         if (usernameResponse.getStatusCode() != HttpStatus.OK) {
             return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
         }
-    
-        String username = usernameResponse.getBody();
-    
-        // Weiterleiten der Anfrage an den Invoice-Service mit dem extrahierten Benutzernamen und der Buchungs-ID
-        String invoiceUrl = "http://localhost:9092/invoice/generate/" + bookingId + "?username=" + username;
-        try {
-            ResponseEntity<?> invoiceResponse = restTemplate.getForEntity(invoiceUrl, String.class);
-            return invoiceResponse;
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Generieren der Rechnung: " + e.getStatusText());
+
+        if (usernameResponse.getStatusCode().is2xxSuccessful()) {
+            String username = usernameResponse.getBody();
+            String invoiceUrl = "http://localhost:9091/booking/" + bookingId + "/invoice?username=" + username;
+            try {
+                return restTemplate.getForEntity(invoiceUrl, String.class);
+            } catch (HttpClientErrorException e) {
+                return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Generieren der Rechnung: " + e.getStatusText());
+            }
+        } else {
+            return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
         }
     }
-    @PostMapping("/add-rating")
-    public ResponseEntity<?> addRatingThroughGateway(@RequestBody Review review, @RequestHeader("Authorization") String authToken) {
-        // Überprüfen, ob ein gültiges Authentifizierungstoken vorhanden ist
-//        if (authToken == null || authToken.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Authentication token is required");
-//        }
-
-        // Abrufen des Benutzernamens vom User Service
-        String usernameUrl = "http://localhost:9090/users/get-username";
+    @PostMapping("/rating")
+    public ResponseEntity<?> addRatingThroughGateway(@RequestBody Map<String, Object> ratingData, @RequestHeader("Authorization") String authToken) {
+        // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
+        String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
         ResponseEntity<String> usernameResponse;
+        ResponseEntity<Booking> bookingResponse;
         try {
             usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
         } catch (HttpClientErrorException e) {
@@ -291,12 +290,34 @@ public class GatewayController {
 
         String username = usernameResponse.getBody();
 
+        // Extrahieren der bookingId und des Review aus der HashMap
+        Integer bookingId = (Integer) ratingData.get("bookingId");
+        Map<String, Object> reviewMap = (Map<String, Object>) ratingData.get("review");
 
+        // Überprüfen, ob Sterne vorhanden und gültig sind
+        if (reviewMap.get("stars") == null) {
+            return ResponseEntity.badRequest().body("Sternebewertung ist erforderlich.");
+        }
+        Integer stars = (Integer) reviewMap.get("stars");
+        String comment = (String) reviewMap.get("comment");
+        Review review = new Review(stars, comment);
+
+        // Weiterleiten der Anfrage an den Booking-Service mit dem extrahierten Benutzernamen und der Buchungs-ID
+        String bookingUrl = "http://localhost:9091/booking/" + username + "/" + bookingId;
+        try {
+            bookingResponse = restTemplate.getForEntity(bookingUrl, Booking.class);
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen der Buchung: " + e.getStatusText());
+        }
+
+        Booking bookingForReview = bookingResponse.getBody();
+
+        RatingDTO ratingDTO = new RatingDTO(bookingForReview, review);
 
         // Vorbereitung der Anfrage an das Rating-Service
-        String ratingUrl = "http://localhost:9092/api/ratings/add";
+        String ratingUrl = "http://localhost:9092/rating";
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Review> requestEntity = new HttpEntity<>(review, headers);
+        HttpEntity<RatingDTO> requestEntity = new HttpEntity<>(ratingDTO, headers);
 
         try {
             // Senden der Bewertungsanfrage an das Rating-Service
@@ -305,43 +326,29 @@ public class GatewayController {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Hinzufügen der Bewertung: " + e.getStatusText());
         }
     }
+    @GetMapping("/rating")
+    public ResponseEntity<?> getAllRatingsThroughGateway() {
+        String ratingServiceUrl = "http://localhost:9092/rating";
 
-    @GetMapping("/average-rating")
-    public ResponseEntity<?> getAverageRatingThroughGateway(@RequestHeader("Authorization") String authToken) {
-        // Überprüfen, ob ein gültiges Authentifizierungstoken vorhanden ist
-//        if (authToken == null || authToken.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Authentication token is required");
-//        }
-
-        // Abrufen des Benutzernamens vom User Service
-        String usernameUrl = "http://localhost:9090/users/get-username";
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", authToken);
-        HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> usernameResponse;
-        try {
-            usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+        ResponseEntity<Collection> responseEntity = restTemplate.getForEntity(ratingServiceUrl, Collection.class);
+        if (responseEntity.getBody() == null || responseEntity.getBody().isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(responseEntity.getBody());
+    }
 
-        if (usernameResponse.getStatusCode() != HttpStatus.OK) {
-            return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
-        }
-
-        String username = usernameResponse.getBody();
-
-        // Vorbereitung der Anfrage an das Rating-Service
-        String averageRatingUrl = "http://localhost:9092/api/ratings/average";
+    @GetMapping("/average")
+    public ResponseEntity<?> getAverageRatingThroughGateway() {
+        String averageRatingUrl = "http://localhost:9092/average";
         HttpHeaders averageRatingHeaders = new HttpHeaders();
-        averageRatingHeaders.set("Authorization", authToken);
         HttpEntity<?> averageRatingRequest = new HttpEntity<>(averageRatingHeaders);
 
         try {
-            // Senden der Anfrage für die durchschnittliche Bewertung an das Rating-Service
             return restTemplate.exchange(averageRatingUrl, HttpMethod.GET, averageRatingRequest, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen der durchschnittlichen Bewertung: " + e.getStatusText());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Allgemeiner Fehler beim Abrufen der durchschnittlichen Bewertung: " + e.getMessage());
         }
     }
 

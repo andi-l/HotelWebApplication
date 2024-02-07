@@ -1,30 +1,24 @@
-package fra.uas.repository;
+package fra.uas.Repository;
 
 
 import java.util.ArrayList;
 
-import fra.uas.model.Booking;
-
+import fra.uas.Model.*;
 import org.springframework.stereotype.Repository;
-import fra.uas.model.Review;
+
+import java.util.Collection;
 import java.util.HashMap;
 
 
 @Repository
 public class RatingRepository {
+    public HashMap<Booking, Review> reviewHashMap = new HashMap<Booking, Review>();
 
-    //public ArrayList<Review> reviewArrayList = new ArrayList<>();
+    public void addReview(Booking booking, Review review) {
+        reviewHashMap.put(booking, review);
+    }
 
-    public HashMap<Integer, Review> reviewHashMap = new HashMap<Integer, Review>();
-
-
-
-
-//        public void addReviewId(Review review) {
-//        int reviewId = Booking.getID();
-//
-//        reviewHashMap.put(reviewId, review);
-//       }
-
-
+    public Collection<Review> getAllReviews() {
+        return reviewHashMap.values();
+    }
 }
