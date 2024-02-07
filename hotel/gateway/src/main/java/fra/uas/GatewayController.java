@@ -1,5 +1,6 @@
 package fra.uas;
 
+import fra.uas.Model.Rating;
 import fra.uas.model.User;
 import fra.uas.model.UserDTO;
 import org.springframework.http.*;
