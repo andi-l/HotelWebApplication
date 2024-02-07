@@ -66,4 +66,9 @@ public class RatingService implements RatingServiceInterface {
         return (double) sum / count;
     }
 
+
+    public void deleteReview(Long reviewId) {
+        ratingRepository.reviewHashMap.remove(reviewId);
+        System.out.println("Bewertung mit ID " + reviewId + " gelöscht.");
+    }
 }

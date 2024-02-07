@@ -352,6 +352,22 @@ public class GatewayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Allgemeiner Fehler beim Abrufen der durchschnittlichen Bewertung: " + e.getMessage());
         }
     }
+    @DeleteMapping("/ratings/{reviewId}")
+    public ResponseEntity<?> deleteRating(@PathVariable Long reviewId, @RequestHeader("Authorization") String authToken) {
+        // Führt Authentifizierung und Autorisierung durch, um sicherzustellen, dass der Benutzer berechtigt ist, die Bewertung zu löschen
 
+        try {
+            // Senden der DELETE-Anfrage an den Rating-Service, um die Bewertung zu löschen
+            String ratingServiceUrl = "http://localhost:9092/api/ratings/" + reviewId;
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", authToken);
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            ResponseEntity<?> response = restTemplate.exchange(ratingServiceUrl, HttpMethod.DELETE, requestEntity, String.class);
+            
+            return response;
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Löschen der Bewertung: " + e.getStatusText());
+        }
+    }
 
 }

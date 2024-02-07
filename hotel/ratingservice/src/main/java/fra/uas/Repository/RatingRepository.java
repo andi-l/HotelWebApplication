@@ -21,4 +21,5 @@ public class RatingRepository {
     public Collection<Review> getAllReviews() {
         return reviewHashMap.values();
     }
+
 }
