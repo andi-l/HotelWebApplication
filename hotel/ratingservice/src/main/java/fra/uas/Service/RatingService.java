@@ -21,10 +21,10 @@ public class RatingService implements RatingServiceInterface {
     @Autowired
     public RatingRepository ratingRepository;
 
-    //Neu mit HashMap
+    //HashMap
     @Override
     public void addRating(Booking booking, Review review) {
-        // Überprüfen, ob die Booking- und Review-Objekte nicht null sind
+        // Check that the Booking and Review objects are not null
         if (booking == null || review == null) {
             logger.warn("Review oder Booking ist null, kann nicht zum Repository hinzugefügt werden.");
             return;
@@ -40,29 +40,29 @@ public class RatingService implements RatingServiceInterface {
     }
 
     public double getAverage() {
-        // Prüfen, ob Bewertungen vorhanden sind
+        // Check if there are available Reviews
         if (ratingRepository.reviewHashMap.isEmpty()) {
             logger.warn("Keine Bewertungen vorhanden.");
-            return 0.0; // Rückgabe 0, wenn keine Bewertungen vorhanden sind
+            return 0.0; // Return 0 if there are no reviews
         }
 
-        int sum = 0; // Summe der Sternebewertungen
-        int count = 0; // Anzahl der Bewertungen
+        int sum = 0; // Total star Ratings
+        int count = 0; // Number of Reviews
 
-        // Iterieren über alle Bewertungen im Repository
+        // Iterate over all reviews in the repository
         for (Review review : ratingRepository.reviewHashMap.values()) {
-            if (review != null && review.getStars() != null) { // Sicherstellen, dass review und stars nicht null sind
-                sum += review.getStars(); // Hinzufügen der Sterne zur Summe
-                count++; // Erhöhen des Zählers
+            if (review != null && review.getStars() != null) { // Make sure review and stars are not zero
+                sum += review.getStars(); // Adding the stars to the total
+                count++; // Increase the counter
             }
         }
 
         if (count == 0) {
             logger.warn("Keine gültigen Bewertungen vorhanden.");
-            return 0.0; // Rückgabe 0, wenn keine gültigen Bewertungen vorhanden sind
+            return 0.0; // Returns 0 if there are no valid reviews
         }
 
-        // Berechnung des Durchschnitts und Rückgabe
+        // Calculating the average and returning it
         return (double) sum / count;
     }
 

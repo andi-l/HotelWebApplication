@@ -27,7 +27,7 @@ public class RatingController {
                 return ResponseEntity.badRequest().body("Die Sternebewertung muss zwischen 0 und 5 liegen.");
             }
 
-            // Füge die Bewertung mithilfe des RatingService hinzu
+            // Add the rating using the RatingService
             ratingService.addRating(ratingDTO.getBooking(), ratingDTO.getReview());
 
 
@@ -51,14 +51,14 @@ public class RatingController {
         try {
             double averageRating = ratingService.getAverage();
 
-            // Wenn keine Bewertungen vorhanden sind
+            // If there are no reviews
             if (averageRating == 0.0) {
                 return ResponseEntity.ok("Keine Bewertungen vorhanden.");
             }
 
             return ResponseEntity.ok("Durchschnittliche Bewertung: " + averageRating);
         } catch (Exception e) {
-            // Bei einem Fehler geben Sie eine entsprechende Fehlermeldung zurück
+            // If an error occurs, return an appropriate error message
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fehler beim Abrufen der durchschnittlichen Bewertung: " + e.getMessage());
         }
 

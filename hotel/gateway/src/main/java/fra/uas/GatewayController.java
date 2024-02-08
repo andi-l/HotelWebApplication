@@ -315,18 +315,19 @@ public class GatewayController {
 
         RatingDTO ratingDTO = new RatingDTO(bookingForReview, review);
 
-        // Vorbereitung der Anfrage an das Rating-Service
+        // Preparation of the request to the rating service
         String ratingUrl = "http://localhost:9092/rating";
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<RatingDTO> requestEntity = new HttpEntity<>(ratingDTO, headers);
 
         try {
-            // Senden der Bewertungsanfrage an das Rating-Service
+            // Sending the rating request to the rating service
             return restTemplate.postForEntity(ratingUrl, requestEntity, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Hinzufügen der Bewertung: " + e.getStatusText());
         }
     }
+    //Display Rating
     @GetMapping("/rating")
     public ResponseEntity<?> getAllRatingsThroughGateway() {
         String ratingServiceUrl = "http://localhost:9092/rating";
@@ -338,6 +339,7 @@ public class GatewayController {
         return ResponseEntity.ok(responseEntity.getBody());
     }
 
+    //Show the average Rating 
     @GetMapping("/average")
     public ResponseEntity<?> getAverageRatingThroughGateway() {
         String averageRatingUrl = "http://localhost:9092/average";
@@ -354,10 +356,10 @@ public class GatewayController {
     }
     @DeleteMapping("/ratings/{reviewId}")
     public ResponseEntity<?> deleteRating(@PathVariable Long reviewId, @RequestHeader("Authorization") String authToken) {
-        // Führt Authentifizierung und Autorisierung durch, um sicherzustellen, dass der Benutzer berechtigt ist, die Bewertung zu löschen
-
+        
+        // Performs authentication and authorization to ensure the user is authorized to delete the review
         try {
-            // Senden der DELETE-Anfrage an den Rating-Service, um die Bewertung zu löschen
+            // Sending the DELETE request to the rating service to delete the rating
             String ratingServiceUrl = "http://localhost:9092/api/ratings/" + reviewId;
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", authToken);
@@ -366,7 +368,7 @@ public class GatewayController {
             
             return response;
         } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Löschen der Bewertung: " + e.getStatusText());
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Löschen der Bewertung:" + e.getStatusText());
         }
     }
 
