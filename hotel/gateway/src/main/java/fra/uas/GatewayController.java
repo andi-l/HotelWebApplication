@@ -28,24 +28,26 @@ public class GatewayController {
         this.restTemplate = restTemplate;
     }
 
-    // This endpoint creates a new user.
-    // It takes a User object and sends a POST request to the user service.
+    // Endpoint to create a new user by sending a POST request to the User Service
     @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody User user) {
         String url = "http://localhost:9090/user";
         HttpEntity<User> request = new HttpEntity<>(user);
         try {
+            // Sends the user data to create a new user
             return restTemplate.postForEntity(url, request, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Username already exists");
         }
     }
 
+    // Endpoint for user login. Sends POST request to User Service for authentication
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loginUser(@RequestBody UserDTO user) {
         String url = "http://localhost:9090/login";
         HttpEntity<UserDTO> request = new HttpEntity<>(user);
         try {
+            // Attempts to authenticate the user with the provided credentials
             return restTemplate.postForEntity(url, request, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
@@ -65,6 +67,7 @@ public class GatewayController {
         }
     }
 
+    // Endpoint to delete a user. Sends DELETE request to User Service
     @RequestMapping(value = "/user", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
         String url = "http://localhost:9090/user";
@@ -72,12 +75,14 @@ public class GatewayController {
         headers.set("Authorization", token);
         HttpEntity<?> request = new HttpEntity<>(headers);
         try {
+            // Deletes the user associated with the token
             return restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
         }
     }
 
+    // Endpoint to change the user's password. Sends PUT request to User Service
     @RequestMapping(value = "/password", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String token, @RequestBody UserDTO newPasswordDTO) {
         String url = "http://localhost:9090/password";
@@ -85,12 +90,14 @@ public class GatewayController {
         headers.set("Authorization", token);
         HttpEntity<UserDTO> request = new HttpEntity<>(newPasswordDTO, headers);
         try {
+            // Changes the user's password
             return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
         }
     }
 
+    // Endpoint to change the user's username. Sends PUT request to User Service
     @RequestMapping(value = "/username", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeUsername(@RequestHeader("Authorization") String token, @RequestBody UserDTO newUsernameDTO) {
         String url = "http://localhost:9090/username";
@@ -98,12 +105,14 @@ public class GatewayController {
         headers.set("Authorization", token);
         HttpEntity<UserDTO> request = new HttpEntity<>(newUsernameDTO, headers);
         try {
+            // Changes the user's username
             return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
         }
     }
 
+    // Endpoint to get the list of users. Sends GET request to User Service
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<?> getUserList(@RequestHeader("Authorization") String token) {
         String url = "http://localhost:9090/list";
@@ -111,22 +120,24 @@ public class GatewayController {
         headers.set("Authorization", token);
         HttpEntity<?> request = new HttpEntity<>(headers);
         try {
+            // Retrieves the list of users
             return restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
         }
     }
 
-
+    // Endpoint to create a booking through the gateway. It collects booking data and user authentication token.
+    // It then retrieves the username from the User Service and sends a POST request to the Booking Service.
     @PostMapping(value = "/booking")
     public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
-        // Abrufen des Benutzernamens vom User Service
         String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
         ResponseEntity<String> usernameResponse;
         try {
+            // Obtain the username from the User Service
             usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
@@ -137,11 +148,9 @@ public class GatewayController {
         }
 
         String username = usernameResponse.getBody();
+        bookingData.put("username", username);// Add the retrieved username to the booking data
 
-        // Add the username to the booking data
-        bookingData.put("username", username);
-
-        // Vorbereitung der Anfrage an den Booking Service
+        // Prepare the request to the Booking Service
         String bookingUrl = "http://localhost:9091/booking";
         HttpHeaders bookingHeaders = new HttpHeaders();
         bookingHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -149,22 +158,24 @@ public class GatewayController {
         HttpEntity<Map<String, Object>> bookingRequestEntity = new HttpEntity<>(bookingData, bookingHeaders);
 
         try {
-            // Senden der Buchungsanfrage an den Booking Service
+            // Send the booking request to the Booking Service
             return restTemplate.postForEntity(bookingUrl, bookingRequestEntity, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung. Passen Sie bitte die Daten an." + e.getStatusText());
         }
     }
 
+    // Endpoint to retrieve a booking by ID through the gateway. It uses the user's authentication token to
+    // fetch the username from the User Service and then sends a GET request to the Booking Service.
     @GetMapping("/booking/{bookingId}")
     public ResponseEntity<?> getBookingByUsernameAndIdThroughGateway(@RequestHeader("Authorization") String authToken, @PathVariable int bookingId) {
-        // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
         String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
         ResponseEntity<String> usernameResponse;
         try {
+            // Retrieve the username from the User Service
             usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
@@ -176,7 +187,7 @@ public class GatewayController {
 
         String username = usernameResponse.getBody();
 
-        // Weiterleiten der Anfrage an den Booking-Service mit dem extrahierten Benutzernamen und der Buchungs-ID
+        // Forward the request to the Booking Service with the extracted username and booking ID
         String bookingUrl = "http://localhost:9091/booking/" + username + "/" + bookingId;
         try {
             // Hier könnte zusätzlich eine HttpEntity mit weiteren notwendigen Headers konfiguriert werden, falls nötig
@@ -187,6 +198,8 @@ public class GatewayController {
         }
     }
 
+    // Endpoint to retrieve all bookings for a user through the gateway. It first retrieves the username
+    // from the User Service using the user's authentication token, then sends a GET request to the Booking Service.
     @GetMapping(value = "/booking")
     public ResponseEntity<?> getAllBookingsThroughGateway(@RequestHeader("Authorization") String authToken) {
         // Abrufen des Benutzernamens vom User Service
@@ -196,20 +209,18 @@ public class GatewayController {
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
         ResponseEntity<String> usernameResponse;
         try {
+            // Retrieve the username from the User Service
             usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
         }
-
         if (usernameResponse.getStatusCode() != HttpStatus.OK) {
             return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
         }
-
         String username = usernameResponse.getBody();
-
-        // Anfrage an den Booking Service senden, um alle Buchungen für den Benutzer abzurufen
         String bookingUrl = "http://localhost:9091/booking/" + username;
         try {
+            // Send the request to the Booking Service to retrieve all bookings for the user
             ResponseEntity<String> bookingResponse = restTemplate.exchange(bookingUrl, HttpMethod.GET, null, String.class);
             return bookingResponse;
         } catch (HttpClientErrorException e) {
@@ -217,13 +228,15 @@ public class GatewayController {
         }
     }
 
+    // Endpoint to check room availability through the gateway. It constructs a URL with parameters for the Booking Service
+    // and sends a GET request to check availability based on the provided criteria.
     @GetMapping(value = "/availability")
     public ResponseEntity<?> checkAvailabilityThroughGateway(
             @RequestParam("checkInDate") String checkInDate,
             @RequestParam("checkOutDate") String checkOutDate,
             @RequestParam("capacity") int capacity) {
 
-        // Konstruktion der URL mit Parametern für den Booking-Service
+        // Construct the URL with parameters for the Booking Service
         String availabilityUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9091/availability")
                 .queryParam("checkInDate", checkInDate)
                 .queryParam("checkOutDate", checkOutDate)
@@ -231,7 +244,7 @@ public class GatewayController {
                 .toUriString();
 
         try {
-            // Senden der GET-Anfrage an den Booking-Service und Rückgabe der Antwort
+            // Send the GET request to the Booking Service and return the response
             ResponseEntity<String> response = restTemplate.getForEntity(availabilityUrl, String.class);
             return response;
         } catch (HttpClientErrorException e) {
@@ -270,6 +283,7 @@ public class GatewayController {
             return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
         }
     }
+
     @PostMapping("/rating")
     public ResponseEntity<?> addRatingThroughGateway(@RequestBody Map<String, Object> ratingData, @RequestHeader("Authorization") String authToken) {
         // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
@@ -327,6 +341,7 @@ public class GatewayController {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Hinzufügen der Bewertung: " + e.getStatusText());
         }
     }
+
     //Display Rating
     @GetMapping("/rating")
     public ResponseEntity<?> getAllRatingsThroughGateway() {
@@ -354,6 +369,7 @@ public class GatewayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Allgemeiner Fehler beim Abrufen der durchschnittlichen Bewertung: " + e.getMessage());
         }
     }
+
     @DeleteMapping("/ratings/{reviewId}")
     public ResponseEntity<?> deleteRating(@PathVariable Long reviewId, @RequestHeader("Authorization") String authToken) {
         
@@ -365,7 +381,7 @@ public class GatewayController {
             headers.set("Authorization", authToken);
             HttpEntity<?> requestEntity = new HttpEntity<>(headers);
             ResponseEntity<?> response = restTemplate.exchange(ratingServiceUrl, HttpMethod.DELETE, requestEntity, String.class);
-            
+
             return response;
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Löschen der Bewertung:" + e.getStatusText());
