@@ -1,9 +1,8 @@
-package fra.uas.Repository;
+package fra.uas.repository;
 
 
-import java.util.ArrayList;
-
-import fra.uas.Model.*;
+import fra.uas.model.Booking;
+import fra.uas.model.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;

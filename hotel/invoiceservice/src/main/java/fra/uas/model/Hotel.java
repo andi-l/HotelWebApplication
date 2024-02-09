@@ -11,19 +11,15 @@ public class Hotel {
     private ArrayList<Booking> bookings;
     private ArrayList<Room> rooms;
     private double rating;
-    private ArrayList<Review> allratings;
+    private ArrayList<Rating> allratings;
 
-    public Hotel(String name, String location, double rating, ArrayList<Booking> booking, ArrayList<Review> allRatings) {
+    public Hotel(String name, String location, double rating, ArrayList<Booking> booking, ArrayList<Rating> allRatings) {
         this.name = name;
         this.location = location;
         this.rating = rating;
         this.bookings = new ArrayList<Booking>();
         this. rooms = new ArrayList<Room>();
-        this.allratings = new ArrayList<Review>();
-    }
-
-    public Hotel(){
-
+        this.allratings = new ArrayList<Rating>();
     }
 
 
@@ -51,11 +47,11 @@ public class Hotel {
         this.rating = rating;
     }
 
-    public ArrayList<Review> getAllratings() {
+    public ArrayList<Rating> getAllratings() {
         return this.allratings;
     }
 
-    public void setAllratings(ArrayList<Review> allratings) {
+    public void setAllratings(ArrayList<Rating> allratings) {
         this.allratings = allratings;
     }
 

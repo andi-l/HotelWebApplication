@@ -1,4 +1,6 @@
-package fra.uas.Model;
+package fra.uas.model;
+
+import fra.uas.model.Booking;
 
 public class RatingDTO {
 

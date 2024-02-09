@@ -1,15 +1,18 @@
 package fra.uas.controller;
 
-import fra.uas.Repositories.BookingRepository;
+import fra.uas.dto.BookingDTO;
+import fra.uas.model.Booking;
+import fra.uas.model.Room;
+import fra.uas.repository.BookingRepository;
+import fra.uas.service.BookingService;
+import fra.uas.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import fra.uas.Service.*;
-import fra.uas.DTO.*;
-import fra.uas.Model.*;
-import fra.uas.Repositories.*;
+
+
 
 import java.util.List;
 
@@ -52,6 +55,7 @@ public class BookingController {
                     bookingRequest.getUsername());
 
             if (newBooking == null) {
+                System.out.println("Erroooorrr");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
             } else {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Erfolgreiche Buchung:" + newBooking);
@@ -77,21 +81,29 @@ public class BookingController {
     public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
         Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
 
-        if (booking == null) {
+
+        if(booking ==null)
+
+        {
             return ResponseEntity.notFound().build(); // Buchung nicht gefunden
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(booking); // Buchung gefunden und zurückgegeben
+        return ResponseEntity.status(HttpStatus.OK).
+
+                body(booking);
     }
 
-    @GetMapping("/booking/{bookingId}/invoice")
-    public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, @RequestParam("username") String username) {
-        InvoiceDTO invoice = invoiceService.generateInvoice(bookingId, username);
-        if (invoice == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buchung nicht gefunden oder Fehler bei der Erstellung der Rechnung.");
-        }
-        return ResponseEntity.ok(invoice);
-    }
 
+        // Buchung gefunden und zurückgegeben
+
+
+@GetMapping("/hotel/rooms")
+public ResponseEntity<?> getAllRooms() {
+
+    return ResponseEntity.status(HttpStatus.OK).body(bookingService.getAllRooms());
 
 }
+    }
+
+
+

@@ -1,10 +1,10 @@
-package fra.uas.Controller;
+package fra.uas.controller;
 
-import fra.uas.Model.RatingDTO;
+import fra.uas.model.RatingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import fra.uas.Model.Review;
-import fra.uas.Service.RatingService;
+import fra.uas.model.Review;
+import fra.uas.service.RatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -61,24 +61,6 @@ public class RatingController {
             // If an error occurs, return an appropriate error message
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fehler beim Abrufen der durchschnittlichen Bewertung: " + e.getMessage());
         }
-
-
     }
-
-
-//    @DeleteMapping("/{reviewId}")
-//public ResponseEntity<?> deleteRating(@PathVariable Long reviewId) {
-//    try {
-//        Optional<Review> existingReview = ratingService.getReviewById(reviewId);
-//        if (existingReview.isPresent()) {
-//            ratingService.deleteReview(reviewId);
-//            return ResponseEntity.ok("Rating with ID " + reviewId + " deleted successfully");
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    } catch (Exception e) {
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting rating: " + e.getMessage());
-//    }
-//}
 
 }

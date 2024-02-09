@@ -1,12 +1,13 @@
-package fra.uas.Service;
+package fra.uas.service;
 
-import fra.uas.Model.*;
-import fra.uas.Service.RatingServiceInterface;
+import fra.uas.model.Booking;
+import fra.uas.model.*;
+import fra.uas.service.RatingServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import fra.uas.Repository.*;
+import fra.uas.repository.*;
 
 import java.util.ArrayList;
 import java.util.Collection;

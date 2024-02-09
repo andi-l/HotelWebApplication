@@ -1,19 +1,17 @@
 package fra.uas;
 
-import fra.uas.Model.Rating;
-import fra.uas.model.User;
-import fra.uas.model.UserDTO;
+import fra.uas.model.*;
+import org.apache.coyote.Response;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import fra.uas.Model.Review;
-import fra.uas.Model.RatingDTO;
-import fra.uas.Model.Booking;
-
+import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 
@@ -131,6 +129,10 @@ public class GatewayController {
     // It then retrieves the username from the User Service and sends a POST request to the Booking Service.
     @PostMapping(value = "/booking")
     public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
+        var reso = protectedEndpoint(authToken);
+        if (reso.getStatusCode().is2xxSuccessful()){
+
+        // Abrufen des Benutzernamens vom User Service
         String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
@@ -162,6 +164,10 @@ public class GatewayController {
             return restTemplate.postForEntity(bookingUrl, bookingRequestEntity, String.class);
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung. Passen Sie bitte die Daten an." + e.getStatusText());
+        }
+    }
+        else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You need to login to book a room");
         }
     }
 
@@ -200,7 +206,7 @@ public class GatewayController {
 
     // Endpoint to retrieve all bookings for a user through the gateway. It first retrieves the username
     // from the User Service using the user's authentication token, then sends a GET request to the Booking Service.
-    @GetMapping(value = "/booking")
+    @GetMapping(value = "/bookings")
     public ResponseEntity<?> getAllBookingsThroughGateway(@RequestHeader("Authorization") String authToken) {
         // Abrufen des Benutzernamens vom User Service
         String usernameUrl = "http://localhost:9090/username";
@@ -221,7 +227,7 @@ public class GatewayController {
         String bookingUrl = "http://localhost:9091/booking/" + username;
         try {
             // Send the request to the Booking Service to retrieve all bookings for the user
-            ResponseEntity<String> bookingResponse = restTemplate.exchange(bookingUrl, HttpMethod.GET, null, String.class);
+                ResponseEntity<List> bookingResponse = restTemplate.exchange(bookingUrl, HttpMethod.GET, null, List.class);
             return bookingResponse;
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Abfrage der Buchungen: " + e.getStatusText());
@@ -253,14 +259,20 @@ public class GatewayController {
     }
 
 
-    @GetMapping("/booking/invoice/{bookingId}")
+
+
+
+    @GetMapping("/invoice/{bookingId}")
     public ResponseEntity<?> generateInvoiceThroughGateway(@RequestHeader("Authorization") String authToken, @PathVariable int bookingId) {
         // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
+
+
         String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
         HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
         ResponseEntity<String> usernameResponse;
+
         try {
             usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
         } catch (HttpClientErrorException e) {
@@ -272,10 +284,44 @@ public class GatewayController {
         }
 
         if (usernameResponse.getStatusCode().is2xxSuccessful()) {
+            var userBookings =   getAllBookingsThroughGateway(authToken).getBody();
+            System.out.println("Hallo: "+userBookings);
+            assert userBookings != null;
+            if (userBookings.getClass().isAssignableFrom(List.class)){
+                System.out.println("Guten Tag");
+            }
+            System.out.println(userBookings.getClass());
+
+            if (userBookings== null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have no bookings to generate an invoice for.");
+            }
+
+            //TODO get all rooms from Hotel
+
+            var rooms =   getAllRooms().getBody();
+            System.out.println("Hallo2: "+rooms);
+            assert rooms != null;
+            if (rooms.getClass().isAssignableFrom(List.class)){
+                System.out.println("Guten Tag2");
+            }
+            System.out.println("rooms"+rooms.getClass());
+
+            if (rooms== null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There are no rooms in this hotel");
+            }
+            //TODO
+            Hotel hoteldto= new Hotel();
+            hoteldto.setBookings((ArrayList<Booking>) userBookings);
+            hoteldto.setRooms((ArrayList<Room>) rooms);
+
+            HttpEntity<Object> requestEntity = new HttpEntity<>(hoteldto);
             String username = usernameResponse.getBody();
-            String invoiceUrl = "http://localhost:9091/booking/" + bookingId + "/invoice?username=" + username;
+            String invoiceUrl = "http://localhost:9093/invoiceservice/" + bookingId + "/" + username;
+
             try {
-                return restTemplate.getForEntity(invoiceUrl, String.class);
+                //System.out.println("here");
+                return restTemplate.postForEntity(invoiceUrl, requestEntity, String.class);
+
             } catch (HttpClientErrorException e) {
                 return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Generieren der Rechnung: " + e.getStatusText());
             }
@@ -343,7 +389,7 @@ public class GatewayController {
     }
 
     //Display Rating
-    @GetMapping("/rating")
+    @GetMapping("/ratings")
     public ResponseEntity<?> getAllRatingsThroughGateway() {
         String ratingServiceUrl = "http://localhost:9092/rating";
 
@@ -372,7 +418,7 @@ public class GatewayController {
 
     @DeleteMapping("/ratings/{reviewId}")
     public ResponseEntity<?> deleteRating(@PathVariable Long reviewId, @RequestHeader("Authorization") String authToken) {
-        
+
         // Performs authentication and authorization to ensure the user is authorized to delete the review
         try {
             // Sending the DELETE request to the rating service to delete the rating
@@ -386,6 +432,16 @@ public class GatewayController {
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Löschen der Bewertung:" + e.getStatusText());
         }
+    }
+
+    public ResponseEntity<?> getAllRooms() {
+        String bookingServiceUrl = "http://localhost:9091/hotel/rooms";
+
+        ResponseEntity<List> responseEntity = restTemplate.getForEntity(bookingServiceUrl, List.class);
+        if (responseEntity.getBody() == null || responseEntity.getBody().isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(responseEntity.getBody());
     }
 
 }

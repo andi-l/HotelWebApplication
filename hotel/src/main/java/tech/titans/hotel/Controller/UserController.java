@@ -48,14 +48,6 @@ public class UserController {
     }
 
     // Protected endpoint
-    @GetMapping("/protected")
-    public ResponseEntity<?> protectedEndpoint(@RequestHeader("Authorization") String authToken) {
-        if (tokenService.isTokenValid(authToken)) {
-            return ResponseEntity.ok("Access to protected resource granted");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in or the session has expired");
-        }
-    }
 
 
     // Delete a User

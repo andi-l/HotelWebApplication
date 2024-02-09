@@ -1,6 +1,7 @@
-package fra.uas.Service;
+package fra.uas.service;
 
-import fra.uas.Model.*;
+import fra.uas.model.Booking;
+import fra.uas.model.*;
 
 public interface RatingServiceInterface {
 
