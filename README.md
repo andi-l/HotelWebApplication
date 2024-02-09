@@ -29,7 +29,7 @@ Benutzer interagieren ausschließlich mit dem Gateway, der als zentraler Zugangs
 | GET          | /gateway/booking/{bookingId}       | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
 | GET          | /gateway/booking                   | 200 OK, 401 Unauthorized         |
 | GET          | /gateway/availability              | 200 OK, 400 Bad Request          |
-| GET          | /gateway/booking/invoice/{bookingId} | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
+| GET          | /gateway/invoice/{bookingId} | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
 | POST         | /gateway/rating                    | 200 OK, 400 Bad Request, 401 Unauthorized |
 | GET          | /gateway/rating                    | 200 OK, 204 No Content           |
 | GET          | /gateway/average                   | 200 OK, 204 No Content, 500 Internal Server Error |
