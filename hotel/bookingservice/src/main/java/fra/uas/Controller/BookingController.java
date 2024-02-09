@@ -10,6 +10,7 @@ import fra.uas.Service.*;
 import fra.uas.DTO.*;
 import fra.uas.Model.*;
 import fra.uas.Repositories.*;
+
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class BookingController {
             @RequestParam("checkInDate") String checkInDateString,
             @RequestParam("checkOutDate") String checkOutDateString,
             @RequestParam("capacity") int capacity) {
-        
+
         List<Room> availableRooms = bookingService.checkAvailability(checkInDateString, checkOutDateString, capacity);
 
         if (availableRooms.isEmpty()) {
@@ -41,12 +42,12 @@ public class BookingController {
 
     @PostMapping(value = "/booking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest) {
-        
+
         try {
             Booking newBooking = bookingService.createBooking(
-                    bookingRequest.getRoomType(), 
-                    bookingRequest.getCheckInDate(), 
-                    bookingRequest.getCheckOutDate(), 
+                    bookingRequest.getRoomType(),
+                    bookingRequest.getCheckInDate(),
+                    bookingRequest.getCheckOutDate(),
                     bookingRequest.getCapacity(),
                     bookingRequest.getUsername());
 
@@ -70,18 +71,18 @@ public class BookingController {
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(bookings);
         }
-}
-
-@GetMapping("/booking/{username}/{bookingId}")
-public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
-    Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
-
-    if (booking == null) {
-        return ResponseEntity.notFound().build(); // Buchung nicht gefunden
     }
 
-    return ResponseEntity.status(HttpStatus.OK).body(booking); // Buchung gefunden und zurückgegeben
-}
+    @GetMapping("/booking/{username}/{bookingId}")
+    public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
+        Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
+
+        if (booking == null) {
+            return ResponseEntity.notFound().build(); // Buchung nicht gefunden
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(booking); // Buchung gefunden und zurückgegeben
+    }
 
     @GetMapping("/booking/{bookingId}/invoice")
     public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, @RequestParam("username") String username) {
@@ -93,4 +94,4 @@ public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username
     }
 
 
-    }
+}

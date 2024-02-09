@@ -64,7 +64,7 @@ public class RatingController {
 
 
     }
-}
+
 
 //    @DeleteMapping("/{reviewId}")
 //public ResponseEntity<?> deleteRating(@PathVariable Long reviewId) {
@@ -81,4 +81,4 @@ public class RatingController {
 //    }
 //}
 
-//}
+}

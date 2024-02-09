@@ -25,21 +25,21 @@ public class InvoiceService {
 
     public InvoiceDTO generateInvoice(int bookingId, String username) {
         Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
-    
+
         if (booking == null) {
             logger.info("Booking not found");
             return null;
         }
-    
+
         // Calculate the number of days stayed
         long daysStayed = (booking.getCheckOutDate().getTime() - booking.getCheckInDate().getTime()) / (1000 * 60 * 60 * 24);
-        
+
         // Calculate the total cost
         double totalCost = daysStayed * calculatePricePerNight(booking);
-    
+
         return createInvoiceDTO(booking, totalCost);
     }
-    
+
 
     private double calculatePricePerNight(Booking booking) {
         for (Hotel hotel : hotelRepository.hotelList) {

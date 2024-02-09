@@ -28,10 +28,9 @@ public class RatingService implements RatingServiceInterface {
         if (booking == null || review == null) {
             logger.warn("Review oder Booking ist null, kann nicht zum Repository hinzugefügt werden.");
             return;
-        }
-        else {
-        ratingRepository.addReview(booking, review);
-        logger.info("Review erfolgreich für Booking hinzugefügt: " + booking.toString());
+        } else {
+            ratingRepository.addReview(booking, review);
+            logger.info("Review erfolgreich für Booking hinzugefügt: " + booking.toString());
         }
     }
 
