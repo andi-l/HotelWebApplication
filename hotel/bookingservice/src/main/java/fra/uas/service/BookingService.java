@@ -54,9 +54,8 @@ public class BookingService {
             // Checking availability
             for (Hotel hotel : hotelRepository.getAllHotels()) {
                 for (Room room : hotel.getRooms()) {
-                    var roomAvailable = isRoomAvailable(capacity, checkInDate, checkOutDate,room.getType(), room.getId());
+                    var roomAvailable = isRoomAvailable(capacity, checkInDate, checkOutDate, room.getType(), room.getId());
                     if (room.getCapacity() == capacity && roomAvailable) {
-                        System.out.println("Room:    "+room);
                         availableRooms.add(room);
                         logger.info("Verfügbarer und sauberer Raum: ", room);
                     }
@@ -71,16 +70,14 @@ public class BookingService {
     }
 
 
-    //TODO Pr+fung
-    private boolean isRoomAvailable(int capacity, Date checkInDate, Date checkOutDate,String roomType, int roomId) {
+    private boolean isRoomAvailable(int capacity, Date checkInDate, Date checkOutDate, String roomType, int roomId) {
 
         for (Booking booking : bookingRepository.getAllBooking()) {
-            if (booking.getRoomId()!=roomId){
+            if (booking.getRoomId() != roomId) {
                 continue;
             }
             if (booking.getRoomCapacity() == capacity) {
-
-                if(booking.getRoomType().equals(roomType)){
+                if (booking.getRoomType().equals(roomType)) {
                     if (!(booking.getCheckInDate().after(checkOutDate) || booking.getCheckOutDate().before(checkInDate))) {
                         // Überschneidung gefunden, Raum ist nicht verfügbar
                         logger.info("Keine verfügbaren Räume in dem Zeitraum");
@@ -90,11 +87,8 @@ public class BookingService {
 
             }
         }
-
-
         return true; // Keine Überschneidungen gefunden, Raum ist verfügbar
     }
-
 
 
     public Booking createBooking(String roomType, String checkInDateString, String checkOutDateString, int capacity, String username) {
@@ -105,7 +99,7 @@ public class BookingService {
             List<Room> availableRooms = checkAvailability(checkInDateString, checkOutDateString, capacity);
             for (Room room : availableRooms) {
 
-                if (room.getType().equals(roomType) ) {
+                if (room.getType().equals(roomType)) {
                     Booking newBooking = new Booking(roomType, checkInDate, checkOutDate, capacity, room.getId());
 
                     bookingRepository.addBookingForUser(username, newBooking);
@@ -135,7 +129,7 @@ public class BookingService {
                             now.after(booking.getCheckOutDate()) &&
                             !room.isClean()) {
                         room.setClean(true);
-                        logger.info("Zimmer nach Check-Out als sauber markiert: " +  room);
+                        logger.info("Zimmer nach Check-Out als sauber markiert: " + room);
                     }
                 }
             }
@@ -162,7 +156,7 @@ public class BookingService {
         return dateFormat.parse(dateString + " " + hour);
     }
 
-    public List<Room> getAllRooms(){
+    public List<Room> getAllRooms() {
         return hotelRepository.hotelList.get(0).getRooms();
     }
 }

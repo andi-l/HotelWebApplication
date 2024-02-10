@@ -1,6 +1,6 @@
 package fra.uas.model;
 
-public class Rating{
+public class Rating {
     int stars;
     String comment;
 

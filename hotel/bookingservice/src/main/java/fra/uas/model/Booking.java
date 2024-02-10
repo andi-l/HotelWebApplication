@@ -51,14 +51,6 @@ public class Booking {
         this.checkOutDate = checkOutDate;
     }
 
-    // public String getHotelName() {
-    //     return hotelName;
-    // }
-
-    // public void setHotelName(String hotelName) {
-    //     this.hotelName = hotelName;
-    // }
-
     public int getRoomCapacity(){
         return roomCapacity;
     }

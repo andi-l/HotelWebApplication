@@ -54,16 +54,16 @@ public class Booking {
     //     this.hotelName = hotelName;
     // }
 
-    public int getRoomCapacity(){
+    public int getRoomCapacity() {
         return roomCapacity;
     }
 
-    public void setRoomCapacity(int roomCapacity){
+    public void setRoomCapacity(int roomCapacity) {
         this.roomCapacity = roomCapacity;
 
     }
 
-    public int getID(){
+    public int getID() {
         return this.id;
     }
 

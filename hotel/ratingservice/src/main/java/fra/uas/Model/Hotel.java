@@ -18,11 +18,11 @@ public class Hotel {
         this.location = location;
         this.rating = rating;
         this.bookings = new ArrayList<Booking>();
-        this. rooms = new ArrayList<Room>();
+        this.rooms = new ArrayList<Room>();
         this.allratings = new ArrayList<Review>();
     }
 
-    public Hotel(){
+    public Hotel() {
 
     }
 

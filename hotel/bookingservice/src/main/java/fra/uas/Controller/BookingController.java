@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
 import java.util.List;
 
 @RestController
@@ -45,7 +44,6 @@ public class BookingController {
 
     @PostMapping(value = "/booking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest) {
-
         try {
             Booking newBooking = bookingService.createBooking(
                     bookingRequest.getRoomType(),
@@ -53,9 +51,7 @@ public class BookingController {
                     bookingRequest.getCheckOutDate(),
                     bookingRequest.getCapacity(),
                     bookingRequest.getUsername());
-
             if (newBooking == null) {
-                System.out.println("Erroooorrr");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kein Zimmer verfügbar für die angegebenen Daten und Kriterien.");
             } else {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Erfolgreiche Buchung:" + newBooking);
@@ -69,7 +65,6 @@ public class BookingController {
     @GetMapping(value = "/booking/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllBookings(@PathVariable String username) {
         List<Booking> bookings = bookingRepository.getAllBookingsByUsername(username);
-
         if (bookings.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No bookings found for user: " + username);
         } else {
@@ -80,30 +75,18 @@ public class BookingController {
     @GetMapping("/booking/{username}/{bookingId}")
     public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
         Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
-
-
-        if(booking ==null)
-
-        {
+        if (booking == null) {
             return ResponseEntity.notFound().build(); // Buchung nicht gefunden
         }
-
         return ResponseEntity.status(HttpStatus.OK).
-
                 body(booking);
     }
 
-
-        // Buchung gefunden und zurückgegeben
-
-
-@GetMapping("/hotel/rooms")
-public ResponseEntity<?> getAllRooms() {
-
-    return ResponseEntity.status(HttpStatus.OK).body(bookingService.getAllRooms());
-
-}
+    @GetMapping("/hotel/rooms")
+    public ResponseEntity<?> getAllRooms() {
+        return ResponseEntity.status(HttpStatus.OK).body(bookingService.getAllRooms());
     }
+}
 
 
 

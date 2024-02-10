@@ -130,43 +130,42 @@ public class GatewayController {
     @PostMapping(value = "/booking")
     public ResponseEntity<?> createBookingThroughGateway(@RequestBody Map<String, Object> bookingData, @RequestHeader("Authorization") String authToken) {
         var reso = protectedEndpoint(authToken);
-        if (reso.getStatusCode().is2xxSuccessful()){
+        if (reso.getStatusCode().is2xxSuccessful()) {
 
-        // Abrufen des Benutzernamens vom User Service
-        String usernameUrl = "http://localhost:9090/username";
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", authToken);
-        HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> usernameResponse;
-        try {
-            // Obtain the username from the User Service
-            usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
-        }
+            // Abrufen des Benutzernamens vom User Service
+            String usernameUrl = "http://localhost:9090/username";
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", authToken);
+            HttpEntity<?> usernameRequest = new HttpEntity<>(headers);
+            ResponseEntity<String> usernameResponse;
+            try {
+                // Obtain the username from the User Service
+                usernameResponse = restTemplate.exchange(usernameUrl, HttpMethod.GET, usernameRequest, String.class);
+            } catch (HttpClientErrorException e) {
+                return ResponseEntity.status(e.getStatusCode()).body("Fehler beim Abrufen des Benutzernamens: " + e.getStatusText());
+            }
 
-        if (usernameResponse.getStatusCode() != HttpStatus.OK) {
-            return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
-        }
+            if (usernameResponse.getStatusCode() != HttpStatus.OK) {
+                return ResponseEntity.status(usernameResponse.getStatusCode()).body("Benutzer nicht gefunden oder ungültiges Token");
+            }
 
-        String username = usernameResponse.getBody();
-        bookingData.put("username", username);// Add the retrieved username to the booking data
+            String username = usernameResponse.getBody();
+            bookingData.put("username", username);// Add the retrieved username to the booking data
 
-        // Prepare the request to the Booking Service
-        String bookingUrl = "http://localhost:9091/booking";
-        HttpHeaders bookingHeaders = new HttpHeaders();
-        bookingHeaders.setContentType(MediaType.APPLICATION_JSON);
+            // Prepare the request to the Booking Service
+            String bookingUrl = "http://localhost:9091/booking";
+            HttpHeaders bookingHeaders = new HttpHeaders();
+            bookingHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<Map<String, Object>> bookingRequestEntity = new HttpEntity<>(bookingData, bookingHeaders);
+            HttpEntity<Map<String, Object>> bookingRequestEntity = new HttpEntity<>(bookingData, bookingHeaders);
 
-        try {
-            // Send the booking request to the Booking Service
-            return restTemplate.postForEntity(bookingUrl, bookingRequestEntity, String.class);
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung. Passen Sie bitte die Daten an." + e.getStatusText());
-        }
-    }
-        else {
+            try {
+                // Send the booking request to the Booking Service
+                return restTemplate.postForEntity(bookingUrl, bookingRequestEntity, String.class);
+            } catch (HttpClientErrorException e) {
+                return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Erstellung der Buchung. Passen Sie bitte die Daten an." + e.getStatusText());
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You need to login to book a room");
         }
     }
@@ -227,7 +226,7 @@ public class GatewayController {
         String bookingUrl = "http://localhost:9091/booking/" + username;
         try {
             // Send the request to the Booking Service to retrieve all bookings for the user
-                ResponseEntity<List> bookingResponse = restTemplate.exchange(bookingUrl, HttpMethod.GET, null, List.class);
+            ResponseEntity<List> bookingResponse = restTemplate.exchange(bookingUrl, HttpMethod.GET, null, List.class);
             return bookingResponse;
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Abfrage der Buchungen: " + e.getStatusText());
@@ -254,19 +253,13 @@ public class GatewayController {
             ResponseEntity<String> response = restTemplate.getForEntity(availabilityUrl, String.class);
             return response;
         } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Verfügbarkeitsprüfung: " + e.getStatusText());
+            return ResponseEntity.status(e.getStatusCode()).body("Fehler bei der Verfügbarkeitsprüfung. " + e.getStatusText());
         }
     }
-
-
-
-
 
     @GetMapping("/invoice/{bookingId}")
     public ResponseEntity<?> generateInvoiceThroughGateway(@RequestHeader("Authorization") String authToken, @PathVariable int bookingId) {
         // Extrahieren des Benutzernamens aus dem Authentifizierungs-Token
-
-
         String usernameUrl = "http://localhost:9090/username";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authToken);
@@ -284,33 +277,31 @@ public class GatewayController {
         }
 
         if (usernameResponse.getStatusCode().is2xxSuccessful()) {
-            var userBookings =   getAllBookingsThroughGateway(authToken).getBody();
-            System.out.println("Hallo: "+userBookings);
+            var userBookings = getAllBookingsThroughGateway(authToken).getBody();
+            System.out.println("Hallo: " + userBookings);
             assert userBookings != null;
-            if (userBookings.getClass().isAssignableFrom(List.class)){
+            if (userBookings.getClass().isAssignableFrom(List.class)) {
                 System.out.println("Guten Tag");
             }
             System.out.println(userBookings.getClass());
 
-            if (userBookings== null){
+            if (userBookings == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have no bookings to generate an invoice for.");
             }
 
-            //TODO get all rooms from Hotel
-
-            var rooms =   getAllRooms().getBody();
-            System.out.println("Hallo2: "+rooms);
+            var rooms = getAllRooms().getBody();
+            System.out.println("Hallo2: " + rooms);
             assert rooms != null;
-            if (rooms.getClass().isAssignableFrom(List.class)){
+            if (rooms.getClass().isAssignableFrom(List.class)) {
                 System.out.println("Guten Tag2");
             }
-            System.out.println("rooms"+rooms.getClass());
+            System.out.println("rooms" + rooms.getClass());
 
-            if (rooms== null){
+            if (rooms == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There are no rooms in this hotel");
             }
-            //TODO
-            Hotel hoteldto= new Hotel();
+
+            Hotel hoteldto = new Hotel();
             hoteldto.setBookings((ArrayList<Booking>) userBookings);
             hoteldto.setRooms((ArrayList<Room>) rooms);
 

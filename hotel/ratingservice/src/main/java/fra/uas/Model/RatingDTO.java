@@ -23,6 +23,7 @@ public class RatingDTO {
     public Booking getBooking() {
         return booking;
     }
+
     public void setBooking() {
         this.booking = booking;
     }

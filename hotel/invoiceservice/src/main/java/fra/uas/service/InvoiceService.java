@@ -18,16 +18,13 @@ public class InvoiceService {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceService.class);
 
 
-
-
-
     public InvoiceDTO generateInvoice(int bookingId, String username, Hotel hotelDto) {
-        //TODO userbooking anstelle von Bookingrepository
-var bookings = hotelDto.getBookings();
 
-var rooms = hotelDto.getRooms();
+        var bookings = hotelDto.getBookings();
 
-Booking userBooking = bookings.stream().filter(booking -> booking.getID() == bookingId).findFirst().orElse(null);
+        var rooms = hotelDto.getRooms();
+
+        Booking userBooking = bookings.stream().filter(booking -> booking.getID() == bookingId).findFirst().orElse(null);
 
         if (userBooking == null) {
             logger.info("Booking not found");

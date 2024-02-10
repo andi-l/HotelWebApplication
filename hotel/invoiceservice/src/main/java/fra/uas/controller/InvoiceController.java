@@ -20,12 +20,11 @@ public class InvoiceController {
 
     @PostMapping("/invoiceservice/{bookingId}/{username}")
     public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, @PathVariable String username, @RequestBody Hotel hotelDto) {
-        System.out.println("username: "+ username);
         InvoiceDTO invoice = invoiceService.generateInvoice(bookingId, username, hotelDto);
         if (invoice == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buchung nicht gefunden oder Fehler bei der Erstellung der Rechnung.");
         }
-        return ResponseEntity.ok("Username : "+username+"\n"+ invoice);
+        return ResponseEntity.ok("Username : " + username + "\n" + invoice);
     }
 }
 

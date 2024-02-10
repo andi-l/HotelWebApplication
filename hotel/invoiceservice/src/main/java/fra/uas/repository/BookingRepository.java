@@ -1,6 +1,7 @@
 package fra.uas.repository;
 
 import fra.uas.model.*;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,11 +14,11 @@ public class BookingRepository {
 
     public HashMap<String, List<Booking>> userBookings = new HashMap<>();
 
-    public List<Booking> getAllBooking(){
+    public List<Booking> getAllBooking() {
         List<Booking> allBookings = new ArrayList<>();
 
-        for (Map.Entry<String, List<Booking>> entry : userBookings.entrySet()){
-            for (Booking booking: entry.getValue()){
+        for (Map.Entry<String, List<Booking>> entry : userBookings.entrySet()) {
+            for (Booking booking : entry.getValue()) {
                 allBookings.add(booking);
             }
 
