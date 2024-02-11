@@ -18,6 +18,7 @@ public class RatingController {
     @Autowired
     public RatingService ratingService;
 
+    // Add a rating
     @PostMapping("/rating")
     public ResponseEntity<?> addRating(@RequestBody RatingDTO ratingDTO) {
         try {
@@ -37,6 +38,7 @@ public class RatingController {
         }
     }
 
+    // Get all ratings
     @GetMapping("/rating")
     public ResponseEntity<Collection<Review>> getAllRatings() {
         Collection<Review> reviews = ratingService.getAllRatings();
@@ -46,6 +48,7 @@ public class RatingController {
         return ResponseEntity.ok(reviews);
     }
 
+    // Get average of all ratings
     @GetMapping("/average")
     public ResponseEntity<?> getAverageRating() {
         try {

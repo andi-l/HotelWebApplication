@@ -18,6 +18,7 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
+    // Generate an invoice
     @PostMapping("/invoiceservice/{bookingId}/{username}")
     public ResponseEntity<?> generateInvoice(@PathVariable int bookingId, @PathVariable String username, @RequestBody Hotel hotelDto) {
         InvoiceDTO invoice = invoiceService.generateInvoice(bookingId, username, hotelDto);

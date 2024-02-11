@@ -5,7 +5,6 @@ import fra.uas.model.Booking;
 import fra.uas.model.Room;
 import fra.uas.repository.BookingRepository;
 import fra.uas.service.BookingService;
-import fra.uas.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,11 +21,9 @@ public class BookingController {
     private BookingService bookingService;
 
     @Autowired
-    private InvoiceService invoiceService;
-
-    @Autowired
     private BookingRepository bookingRepository;
 
+    // Get all available rooms
     @GetMapping(value = "/availability", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> checkAvailability(
             @RequestParam("checkInDate") String checkInDateString,
@@ -42,6 +39,7 @@ public class BookingController {
         }
     }
 
+    // Create a new booking
     @PostMapping(value = "/booking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingRequest) {
         try {
@@ -61,7 +59,7 @@ public class BookingController {
         }
     }
 
-
+    //Get all bookings for a user
     @GetMapping(value = "/booking/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllBookings(@PathVariable String username) {
         List<Booking> bookings = bookingRepository.getAllBookingsByUsername(username);
@@ -72,6 +70,7 @@ public class BookingController {
         }
     }
 
+    //Get a booking by username and bookingId
     @GetMapping("/booking/{username}/{bookingId}")
     public ResponseEntity<?> getBookingByUsernameAndId(@PathVariable String username, @PathVariable int bookingId) {
         Booking booking = bookingRepository.getBookingByUsernameAndId(username, bookingId);
