@@ -1,3 +1,44 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/-yaTGY9V)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-7f7980b617ed060a017424585567c406b6ee15c891e84e1186181d67ecf80aa0.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=13203711)
-# WebAppProjectTemplate
+# Tech-Titans Projektbeschreibung
+
+Das Projekt ist eine Webanwendung zur Verwaltung von Hotelbuchungen. Es ermöglicht Benutzern, Accounts zu erstellen, Verfügbarkeiten zu prüfen, Buchungen vorzunehmen, Bewertungen abzugeben und Rechnungen zu erhalten.
+
+## Architektur
+
+Unsere Webanwendung basiert auf einer Microservice-Architektur, bei der die Kernfunktionalitäten `User`, `Booking`, `Rating` und `Invoice` als unabhängige Services implementiert sind. Jeder dieser Services läuft auf einem eigenen Port, wodurch sie isoliert voneinander agieren können, was eine höhere Skalierbarkeit, Flexibilität und Wartbarkeit ermöglicht.
+
+### Microservice-Struktur:
+
+- **User Service**: Verwaltet Benutzerkonten und Authentifizierung.
+- **Booking Service**: Zuständig für die Buchungsverwaltung, einschließlich Erstellung, Abfrage und Verwaltung von Buchungen.
+- **Rating Service**: Ermöglicht Benutzern, Bewertungen zu ihren Aufenthalten abzugeben und zu verwalten.
+- **Invoice Service**: Generiert Rechnungen für die Buchungen der Benutzer.
+
+Benutzer interagieren ausschließlich mit dem **Gateway**, der als zentraler Zugangspunkt dient. Der Gateway verknüpft die Anfragen des Benutzers mit den entsprechenden Microservices und leitet Antworten zurück zum Benutzer.
+
+## Endpunkte
+
+| HTTP-Methode | URI                                 | HTTP Statuscodes                                     |
+|--------------|-------------------------------------|-----------------------------------------------------|
+| POST         | `/gateway/user`                    | 200 OK, 400 Bad Request                             |
+| POST         | `/gateway/login`                   | 200 OK, 400 Bad Request, 401 Unauthorized           |
+| DELETE       | `/gateway/user`                    | 200 OK, 401 Unauthorized, 404 Not Found            |
+| PUT          | `/gateway/password`                | 200 OK, 400 Bad Request, 401 Unauthorized           |
+| PUT          | `/gateway/username`                | 200 OK, 400 Bad Request, 401 Unauthorized           |
+| GET          | `/gateway/list`                    | 200 OK, 401 Unauthorized                            |
+| POST         | `/gateway/booking`                 | 200 OK, 400 Bad Request, 401 Unauthorized           |
+| GET          | `/gateway/booking/{bookingId}`     | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
+| GET          | `/gateway/booking`                 | 200 OK, 401 Unauthorized                            |
+| GET          | `/gateway/availability`            | 200 OK, 400 Bad Request                             |
+| GET          | `/gateway/booking/invoice/{bookingId}` | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
+| POST         | `/gateway/rating`                  | 200 OK, 400 Bad Request, 401 Unauthorized           |
+| GET          | `/gateway/rating`                  | 200 OK, 204 No Content                              |
+| GET          | `/gateway/average`                 | 200 OK, 204 No Content, 500 Internal Server Error   |
+| DELETE       | `/gateway/ratings/{reviewId}`      | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
+
+## Codebeispiele und Erklärungen
+
+- **Benutzererstellung und Authentifizierung**: Der Gateway Controller bietet Endpunkte für das Erstellen von Benutzerkonten (`/user`) und das Einloggen (`/login`), wodurch Benutzer mithilfe eines Tokens durch die Anwendung navigieren können, ohne sich erneut einloggen zu müssen.
+
+- **Buchungsmanagement**: Benutzer können Buchungen erstellen (`/booking`), abrufen (`/booking/{id}`) und alle ihre Buchungen anzeigen (`/booking`). Es gibt auch einen Endpunkt zur Überprüfung der Verfügbarkeit von Zimmern basierend auf bestimmten Daten und Kapazitäten (`/availability`).
+
+- **Bewertungen und Rechnungen**: Benutzer können Bewertungen zu ihren Buchungen abgeben (`/rating`) und eine Liste aller Bewertungen abrufen (`/rating`). Für jede Buchung kann auch eine Rechnung generiert werden (`/booking/invoice/{id}`).
